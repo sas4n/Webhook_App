@@ -1,5 +1,6 @@
 const express = require('express')
 const http = require('http')
+const axios = require('axios')
 require('dotenv').config()
 const app = express()
 const path = require('path')
@@ -10,7 +11,14 @@ app.use(express.urlencoded({extended : false}))
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req, res) => {
-    res.send('hi')
+    console.log('get is called')
+    //res.set('PRIVATE-TOKEN', process.env.GITLAB_ACCESS_TOKEN)
+    const config = {
+        headers:{Authorization:` Bearer ${process.env.GITLAB_ACCESS_TOKEN}`  }
+    }
+    axios.get(process.env.GITLAB_URL, config).then((response) => {res.send(response.data)}).catch((error) => {console.log(error)})
+   // res.send() kj
+
 })
 
 app.post('/gitlab', (req, res) => {

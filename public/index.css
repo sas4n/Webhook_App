@@ -1,0 +1,12 @@
+.flex-container {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 10px;
+    justify-content: flex-start;
+    width: 90vw;
+}
+
+.flex-item {
+    width: 26vw;
+    height: 200px;
+}
