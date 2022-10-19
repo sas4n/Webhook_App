@@ -9,4 +9,6 @@
 .flex-item {
     width: 26vw;
     height: 200px;
+    background-color: aquamarine;
+    justify-self: center;
 }
