@@ -1,14 +1,63 @@
-.flex-container {
+* {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.issues-data-container,
+.pagination-container {
     display: flex;
     flex-flow: row wrap;
     gap: 10px;
-    justify-content: flex-start;
+
+    justify-content: center;
+    
+}
+
+.pagination-container{
     width: 90vw;
+    align-items: center;
+}
+
+.issues-data-container{
+    width: 80vw;
+}
+
+.navigation-btn{
+    display: flex;
+    justify-content:center;
+    width: 4vw;
+}
+
+.pagination-number-container{
+    display: flex;
+    justify-content: center;
 }
 
 .flex-item {
     width: 26vw;
     height: 200px;
     background-color: aquamarine;
-    justify-self: center;
+    display: flex;
+    justify-content: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.active {
+    background-color: blue;
+    color: white;
+}
+
+.navigation-btn:not(.disabled):hover {
+    color: blue;
+    font-size: 20px;
+    cursor: pointer;
+}
+.page-number:hover{
+    background-color: gray;
+    color :white;
+    cursor: pointer;
 }
