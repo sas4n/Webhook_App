@@ -61,3 +61,8 @@
     color :white;
     cursor: pointer;
 }
+ 
+.page-number {
+    width: 20px;
+    height: 20px;
+}
