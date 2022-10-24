@@ -7,6 +7,7 @@ const path = require('path')
 const server = http.createServer(app)
 const io = require('socket.io')(server)
 
+app.use(express.json())
 app.use(express.urlencoded({extended : false}))
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -17,8 +18,7 @@ io.on('connection', async(socket) => {
             Authorization:` Bearer ${process.env.GITLAB_ACCESS_TOKEN}`
         }
     }
-    const {data} = await axios.get(process.env.GITLAB_URL, config)
-    console.log(data)
+    const {data, headers} = await axios.get(process.env.GITLAB_URL, config)
     const allIssuesData = data.map(issue => ({
         id: issue.id,
         project_id : issue.project_id,
@@ -77,13 +77,30 @@ io.on('connection', async(socket) => {
 })*/
 
 app.post('/gitlab', (req, res) => {
-    console.log(req.headers)
-    console.log(req.body)
-    console.log(process.env.GITLAB_ACCESS_TOKEN)
-    res.set('Authorization', process.env.GITLAB_ACCESS_TOKEN)
+    if(req.headers['x-gitlab-token'] === process.env.GITLAB_SECRET_KEY){
+        const {body} = req
+    const issue = {
+        event_type : body.event_type,
+        owner_name : body.user.name,
+        repository_name : body.repository.name,
+        project_description : body.project.description,
+        issue_description : body.object_attributes.description,
+        created_at : body.object_attributes.created_at,
+        issue_title: body.object_attributes.title,
+        updated_at: body.object_attributes.updated_at,
+        state: body.object_attributes.state,
+        assignees: body.assignees.map(assignee => ({username: assignee.username})),
+        labels: body.labels.map(label => ({name: label.name}))
+    }
+    io.socket.broadcast.emit('issueUpdated', issue)
     res.status(201)
     
     res.send()
+    }else{
+        res.status(403).json({error: new Error('You are not Authorized')})
+    }
+    //res.set('Authorization', `Bearer ${process.env.GITLAB_ACCESS_TOKEN}`)
+    
 })
 
 server.listen(3000, () =>{
