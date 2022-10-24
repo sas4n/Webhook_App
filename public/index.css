@@ -8,25 +8,31 @@
 .pagination-container {
     display: flex;
     flex-flow: row wrap;
-    gap: 10px;
 
-    justify-content: center;
+    
     
 }
 
 .pagination-container{
     width: 90vw;
     align-items: center;
+    justify-content: center;
 }
 
 .issues-data-container{
     width: 80vw;
+    height: 550px;
+    padding-left: 5px;
 }
 
 .navigation-btn{
     display: flex;
     justify-content:center;
-    width: 4vw;
+    width: 2vw;
+    background-color: #7575dd;
+    color: #fff;
+    border-radius: 3px;
+    border: none;
 }
 
 .pagination-number-container{
@@ -34,13 +40,95 @@
     justify-content: center;
 }
 
-.flex-item {
-    width: 26vw;
-    height: 200px;
-    background-color: aquamarine;
+.issue-box {
+    width: 38vw;
+    height: 270px;
+    background-color: #005995;
     display: flex;
-    justify-content: center;
+    margin: 5px;
+    flex-wrap: wrap;
+    border-radius:4px;
 }
+
+.description-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 5px;
+}
+
+.author-container,
+.assignee-container,
+.assignees-container {
+    display: flex;
+    width: 45%;
+    margin: 10px;
+    border-radius: 3px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 5px;
+}
+
+.assignees-container{
+    
+    flex-direction: column;
+    height: 20%;
+    padding: 5px;
+}
+
+.header-container {
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    width: 100%;
+    height: 8%;
+    background-color: gray;
+    color: white;
+    border-radius: 4px;
+}
+p {
+    background-color:#fff685;
+    width: 100%;
+    height: 80%;
+    overflow: auto;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+label {
+    font-size:12px;
+    color: #fff685;
+}
+textarea {
+    resize: none;
+    overflow-y: auto;
+}
+
+.state-container,
+.due-date-container {
+    display: flex;
+    width: 20%;
+    justify-content: flex-start;
+    margin: 5px;
+    height: 20%;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.issue-state {
+    height: 80%;
+    color: red;
+    
+    border-radius: 4px;
+    background-color:#fff685;
+}
+
+.opened {
+    
+    color: #4cb69f;
+}
+
 
 .hidden {
     display: none;
@@ -52,7 +140,6 @@
 }
 
 .navigation-btn:not(.disabled):hover {
-    color: blue;
     font-size: 20px;
     cursor: pointer;
 }
@@ -63,6 +150,13 @@
 }
  
 .page-number {
-    width: 20px;
+    width: 10px;
     height: 20px;
+    margin: 10px 3px;
+    padding-left: 2px;
 }
+
+.disabled {
+    background-color:#bccbde;
+}
+

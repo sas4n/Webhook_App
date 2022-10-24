@@ -18,6 +18,7 @@ io.on('connection', async(socket) => {
         }
     }
     const {data} = await axios.get(process.env.GITLAB_URL, config)
+    console.log(data)
     const allIssuesData = data.map(issue => ({
         id: issue.id,
         project_id : issue.project_id,

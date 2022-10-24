@@ -1,48 +1,64 @@
 
-const flexContainer = document.querySelector('#issues-data-container')
+const issuesContainer = document.querySelector('#issues-data-container')
 const pageNumberContainer = document.querySelector('#pagination-number-container')
 const nextButton = document.querySelector('#next-page')
 const previousButton = document.querySelector('#previous-page')
 
+const issueDataTemplate = document.querySelector('#issue-box-template')
+const dueDateTemplate = document.querySelector('#due-date-template')
 
-const pageLimit = 8
+const pageLimit = 4
 let issuesData 
 let totalPages
-let currentPageNumber =1
+let currentPageNumber = 1
 
-/*nextButton.addEventListener('click', () =>{
-    console.log('next button')
-    //currentPageNumber++
-    //setCurrentPage(currentPageNumber)
-})*/
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('window')
-})
 let socket = io()
 
 socket.on('allIssues', (data) => {
     //issueData = JSON.parse(issueData)
     issuesData = data
-    
+    console.log(issueDataTemplate.innerHTML)
     totalPages = Math.ceil(issuesData.length / pageLimit)
-    console.log('hi')
+    //console.log('hi')
     console.log(issuesData)
     issuesData.forEach((issue) => {
-        const issueDiv = document.createElement('div')
-        issueDiv.classList.add('flex-item')
-        const header = document.createElement('h4')
+        const issueBody = issueDataTemplate.content.cloneNode(true)
+        //console.log(issueBody.innerHTML)
+        const issueBox = issueBody.querySelector('.issue-box')
+        const header = issueBody.querySelector('#issue-title')
+        const description = issueBody.querySelector('textarea')
+        const author = issueBody.querySelector('#issue-author')
+        const assignee = issueBody.querySelector('#issue-assignee')
+        const assignees = issueBody.querySelector('#issue-assignees')
+        const url = issueBody.querySelector('#issue-url')
+        const state = issueBody.querySelector('#issue-state')
+        //const closedBy = issueBody.querySelector('#issue-closed-by')
+        const dueDateContainer = dueDateTemplate.content.cloneNode(true)
+        const dueDate = dueDateContainer.querySelector('#issue-due-date')
+        
         header.textContent = issue.title
-        issueDiv.appendChild(header)
-        flexContainer.appendChild(issueDiv)
+        description.value = issue.description
+        author.textContent = issue.author_name
+        assignee.textContent = issue.assignee
+        issue.assignees.forEach(assignee => assignees.textContent += assignee.assignee_userName + ', ')
+        url.setAttribute('href', issue.web_url)
+        url.text = 'G to Issue page'
+        state.textContent = issue.state
+        issue.state === 'opened' ? state.classList.add('opened') : state.classList.remove('opened')
+        issue.due_date ? (dueDate.textContent=issue.due_date,issueBox.appendChild(dueDateContainer)) : ''
+        issuesContainer.appendChild(issueBody)
+        //const header = document.querySelector('h4')
+        
+        //const description = document.createElement
+       
+        
         
         
     })
     
     handlePageNumber(totalPages)
     setCurrentPage(1)
-   // console.log(nextButton)
-   // nextButton.addEventListener('click', () => {console.log('hiiiiiiiiiiiii')})
     
     
 })
@@ -50,10 +66,12 @@ socket.on('allIssues', (data) => {
 previousButton.addEventListener('click', () => {
     currentPageNumber--
     setCurrentPage(currentPageNumber)
-    console.log('hekkkkkkkkkkkkkkkkkkk')
-    console.log(currentPageNumber)
 })
 
+nextButton.addEventListener('click', () => {
+    currentPageNumber++
+    setCurrentPage(currentPageNumber)
+})
 
 
 const handlePageNumber = (totalPages) => {
@@ -71,11 +89,8 @@ const handlePageNumber = (totalPages) => {
 
 const setCurrentPage = (num) => {
     currentPageNumber = num
-    console.log(num)
     Array.from(document.querySelectorAll('.page-number')).forEach(pageNumber =>{
-        console.log(pageNumber)
         if(pageNumber.dataset.pageNumber == num){
-            
             pageNumber.classList.add('active')
         }else{
             pageNumber.classList.remove('active')
@@ -102,35 +117,25 @@ const pageNumberPressedHandler = (index)=> {
 const nextButtonStatus = () => {
     if(document.querySelectorAll('.page-number')[totalPages-1].classList.contains('active')) {
         disableButton(nextButton)
-       console.log('nextButtonStatus')
     }
-    else {
-        enablebutton(nextButton)
-    }
-   //else {console.log('not next status')}
+    else { enablebutton(nextButton)}
    
 }
 
 const previousButtonStatus = () => {
-    console.log(document.querySelectorAll('.page-number')[0])
     if(document.querySelectorAll('.page-number')[0].classList.contains('active')){
         disableButton(previousButton)
-        console.log('Previous status')
     } 
-    else {
-        enablebutton(previousButton)
-        console.log('Previous status not')
-    }
+    else { enablebutton(previousButton)}
 }
 
 
 const showCurrentPage = () => {
     const visiblePageStartIndex = (currentPageNumber-1) * pageLimit 
     const visiblePageEndIndex = currentPageNumber * pageLimit -1
-    const issueDivs = Array.from(document.querySelectorAll('.flex-item'))
+    const issueDivs = Array.from(document.querySelectorAll('.issue-box'))
     issueDivs.forEach((issueDiv,index) => {
-        if(issueDivs.indexOf(issueDiv) >= visiblePageStartIndex && issueDivs.indexOf(issueDiv) < visiblePageEndIndex){
-            
+        if(index >= visiblePageStartIndex && index <= visiblePageEndIndex){
             issueDiv.classList.remove('hidden')
         }
         else{
@@ -141,7 +146,6 @@ const showCurrentPage = () => {
 }
 
 const disableButton = (button) => {
-    console.log('it pressed')
     button.classList.add('disabled')
     button.setAttribute('disabled', true)
 }
@@ -150,9 +154,3 @@ const enablebutton = (button) => {
     button.classList.remove('disabled')
     button.removeAttribute('disabled')
 }
-
-nextButton.addEventListener('click', () => {
-    currentPageNumber++
-    setCurrentPage(currentPageNumber)
-    console.log('current page number after next', currentPageNumber)
-})

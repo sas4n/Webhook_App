@@ -14,6 +14,43 @@
        <button class="navigation-btn" id="next-page">&gt;</button>
        <div class="pagination-number-container" id="pagination-number-container"></div>
    </div> 
+
+   <template id ="issue-box-template">
+    <div class="issue-box" id="issue-box">
+        <div class="header-container">
+            <h4 class="issue-title" id="issue-title"></h4>
+        </div>
+        
+        <div class="author-container">
+            <label for="issue-author" class="">Author:&nbsp </label>
+            <p class="issue-author" id="issue-author"></p>
+        </div>
+        <div class="assignee-container">
+            <label for="issue-assignee">Assignee: &nbsp</label>
+            <p class="issue-assignee" id="issue-assignee"></p>
+        </div>
+        <div class="assignees-container">
+            <label class="label" for="issue-assignees">Assignees:&nbsp </label>
+            <p class="issue-assignees" id="issue-assignees"></p>
+        </div>
+        
+        <a class="issue-url"  id="issue-url"></a>
+        <div class="description-container"> 
+            <label for="issue-description">Description:</label>
+            <textarea class="issue-description" id="issue-description" rows="5" cols="30" disabled ></textarea>
+        </div>
+        <div class="state-container">
+            <label for="issue-state">State: </label>
+            <p class="issue-state" id="issue-state"></p>
+        </div>  
+    </div>
+</template>
+<template id="due-date-template">
+    <div class="due-date-container">
+        <label for="issue-due-date">Due Date: &nbsp</label>
+        <p class="issue-due-date" id="issue-due-date"></p>
+    </div>
+</template>
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script src="index.js" defer></script>
