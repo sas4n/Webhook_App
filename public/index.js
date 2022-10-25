@@ -18,7 +18,6 @@ let socket = io()
 socket.on('allIssues', (data) => {
     //issueData = JSON.parse(issueData)
     issuesData = data
-    console.log(issueDataTemplate.innerHTML)
     totalPages = Math.ceil(issuesData.length / pageLimit)
     //console.log('hi')
     console.log(issuesData)
@@ -29,24 +28,29 @@ socket.on('allIssues', (data) => {
         const header = issueBody.querySelector('#issue-title')
         const description = issueBody.querySelector('textarea')
         const author = issueBody.querySelector('#issue-author')
-        const assignee = issueBody.querySelector('#issue-assignee')
         const assignees = issueBody.querySelector('#issue-assignees')
-        const url = issueBody.querySelector('#issue-url')
+        const labels = issueBody.querySelector('#issue-labels')
+        const createdAt = issueBody.querySelector('#issue-created-at')
+        const closedAt = issueBody.querySelector('#issue-closed-at')
         const state = issueBody.querySelector('#issue-state')
-        //const closedBy = issueBody.querySelector('#issue-closed-by')
-        const dueDateContainer = dueDateTemplate.content.cloneNode(true)
-        const dueDate = dueDateContainer.querySelector('#issue-due-date')
+        const closedBy = issueBody.querySelector('#issue-closed-by')
+        const dueDate = issueBody.querySelector('#issue-due-date')
+        const upvotes = issueBody.querySelector('#issue-upvote')
+        const downvotes = issueBody.querySelector('#issue-downvote')
         
         header.textContent = issue.title
         description.value = issue.description
         author.textContent = issue.author_name
-        assignee.textContent = issue.assignee
+        issue.labels.forEach(label => {labels.textContent += label + ' ' } )
         issue.assignees.forEach(assignee => assignees.textContent += assignee.assignee_userName + ', ')
-        url.setAttribute('href', issue.web_url)
-        url.text = 'G to Issue page'
+        createdAt.textContent = issue.created_at
+        issue.state === 'closed' ? closedAt.textContent = issue.closed_at : closedAt.textContent='_',
         state.textContent = issue.state
         issue.state === 'opened' ? state.classList.add('opened') : state.classList.remove('opened')
-        issue.due_date ? (dueDate.textContent=issue.due_date,issueBox.appendChild(dueDateContainer)) : ''
+        issue.due_date ? (dueDate.textContent=issue.due_date) : ''
+        issue.closed_by ? (closedBy.textContent=issue.closed_by) : ''
+        upvotes.textContent = issue.upvotes
+        downvotes.textContent = issue.downvotes
         issuesContainer.appendChild(issueBody)
         //const header = document.querySelector('h4')
         
@@ -61,6 +65,11 @@ socket.on('allIssues', (data) => {
     setCurrentPage(1)
     
     
+})
+
+socket.on('issueUpdated', (issue) => {
+    console.log('webhook')
+    console.log(issue)
 })
 
 previousButton.addEventListener('click', () => {

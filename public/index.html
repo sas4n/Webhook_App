@@ -5,15 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="css/css/fontawesome.css">
+    <link rel="stylesheet" href="css/css/solid.css">
     <title>Document</title>
 </head>
 <body>
-   <div class="pagination-container">
+    <div class="pagination-container">
        <button class="navigation-btn" id="previous-page">&lt;</button>
        <div class="issues-data-container" id="issues-data-container"></div>
        <button class="navigation-btn" id="next-page">&gt;</button>
        <div class="pagination-number-container" id="pagination-number-container"></div>
-   </div> 
+    </div> 
+    <div class="issue-updated-container" id="issue-updated-container">
+        <div class="issue-message-container">
+            <p class="issue-message" id="issue-message"></p>
+        </div>
+        
+    </div>
 
    <template id ="issue-box-template">
     <div class="issue-box" id="issue-box">
@@ -25,31 +33,52 @@
             <label for="issue-author" class="">Author:&nbsp </label>
             <p class="issue-author" id="issue-author"></p>
         </div>
-        <div class="assignee-container">
-            <label for="issue-assignee">Assignee: &nbsp</label>
-            <p class="issue-assignee" id="issue-assignee"></p>
+        <div class="labels-container"  id="labels-container">
+            <label for="issue-labels" > Labels: </label>
+            <p class="issue-labels" id="issue-labels"></p>
+        </div>
+        <div class="vote-container" id="vote-container">
+            <div class="upvote-container">
+                <i class="fa-solid fa-thumbs-up"></i>
+                <p class="issue-upvote" id="issue-upvote"></p>
+            </div>
+            <div class="downvote-container">
+                <i class="fa-solid fa-thumbs-down"></i>
+                <p class="issue-downvote" id="issue-downvote"></p>
+            </div>
+            
         </div>
         <div class="assignees-container">
             <label class="label" for="issue-assignees">Assignees:&nbsp </label>
             <p class="issue-assignees" id="issue-assignees"></p>
         </div>
-        
-        <a class="issue-url"  id="issue-url"></a>
+        <div class="date-container">
+            <div class="created-at-container">
+                <label for="issue-created-at">Created at: &nbsp</label>
+                <p class="issue-created-at" id="issue-created-at"></p>
+            </div>
+            <div class="closed-at-container">
+                <label for="issue-closed-at">Closed at: &nbsp</label>
+                <p class="issue-closed-at" id="issue-closed-at"></p>
+            </div> 
+        </div>
         <div class="description-container"> 
             <label for="issue-description">Description:</label>
-            <textarea class="issue-description" id="issue-description" rows="5" cols="30" disabled ></textarea>
+            <textarea class="issue-description" id="issue-description" rows="5" cols="30" readonly ></textarea>
         </div>
         <div class="state-container">
             <label for="issue-state">State: </label>
             <p class="issue-state" id="issue-state"></p>
         </div>  
+        <div class="due-date-container">
+            <label for="issue-due-date">Due Date: &nbsp</label>
+            <p class="issue-due-date" id="issue-due-date"></p>
+        </div>
+        
     </div>
 </template>
 <template id="due-date-template">
-    <div class="due-date-container">
-        <label for="issue-due-date">Due Date: &nbsp</label>
-        <p class="issue-due-date" id="issue-due-date"></p>
-    </div>
+   
 </template>
 </body>
 <script src="/socket.io/socket.io.js"></script>
