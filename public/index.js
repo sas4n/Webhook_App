@@ -15,11 +15,13 @@ let currentPageNumber = 1
 
 let socket = io()
 
-socket.on('allIssues', (data) => {
+socket.on('fetchAllData', (data) => {
     //issueData = JSON.parse(issueData)
+    issuesContainer.replaceChildren()
+    pageNumberContainer.replaceChildren()
     issuesData = data
     totalPages = Math.ceil(issuesData.length / pageLimit)
-    //console.log('hi')
+    console.log('fetchdata from server received')
     console.log(issuesData)
     issuesData.forEach((issue) => {
         const issueBody = issueDataTemplate.content.cloneNode(true)
@@ -70,6 +72,11 @@ socket.on('allIssues', (data) => {
 socket.on('issueUpdated', (issue) => {
     console.log('webhook')
     console.log(issue)
+    socket.emit('getAllData')
+})
+
+socket.on('updateThePage', (data) => {
+    console.log('what is happening')
 })
 
 previousButton.addEventListener('click', () => {

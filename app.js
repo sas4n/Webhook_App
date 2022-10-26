@@ -13,42 +13,14 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 io.on('connection', async(socket) => {
     console.log('user connected')
-    const config = {
-        headers:{
-            Authorization:` Bearer ${process.env.GITLAB_ACCESS_TOKEN}`
-        }
-    }
-    const {data, headers} = await axios.get(process.env.GITLAB_URL, config)
-    console.log(data)
-    const allIssuesData = data.map(issue => ({
-        id: issue.id,
-        project_id: issue.project_id,
-        title: issue.title,
-        description : issue.description,
-        state: issue.state,
-        created_at: issue.created_at,
-        closed_at: issue.closed_at,
-        labels: issue.labels,
-        closed_by: issue.closed_By ? issue.closed_By.name: null,// it s a bug, closed_by is undefined somehow
-        labels: issue.labels,
-        assignees: issue.assignees.map((assignee) => ({assignee_userName: assignee.username})),
-        author_name: issue.author.name,
-        type: issue.type,
-        assignee: issue.assignee ? issue.assignee.name : null,
-        upvotes: issue.upvotes,
-        downvotes: issue.downvotes,
-        due_date: issue.due_date,
-        web_url: issue.web_url,
-        project_url: issue.project,
-
-    }))
-    socket.emit('allIssues', allIssuesData)
+    const allIssuesData = await fethAllData()
+    socket.emit('fetchAllData', allIssuesData)
 
 
 
-    app.post('/gitlab', (req, res) => {
+    app.post('/gitlab', async(req, res) => {
         if(req.headers['x-gitlab-token'] === process.env.GITLAB_SECRET_KEY){
-            console.log('halloooooo')
+            console.log('post from gitlab')
             const {body} = req
         const issue = {
             event_type : body.event_type,
@@ -60,18 +32,27 @@ io.on('connection', async(socket) => {
             issue_title: body.object_attributes.title,
             updated_at: body.object_attributes.updated_at,
             state: body.object_attributes.state,
-            assignees: body.assignees.map(assignee => ({username: assignee.username})),
-            labels: body.labels.map(label => ({name: label.name}))
+            assignees: body.assignees ? body.assignees.map(assignee => ({username: assignee.username})): null,
+            labels: body.labels ? body.labels.map(label => ({name: label.name})): null
         }
-        socket.broadcast.emit('issueUpdated', issue)
+        io.emit('issueUpdated', issue)
+        
         res.status(201)
         
         res.send()
         }else{
+            console.log('not from gitlab')
             res.status(403).json({error: new Error('You are not Authorized')})
         }
+
         //res.set('Authorization', `Bearer ${process.env.GITLAB_ACCESS_TOKEN}`)
         
+    })
+    socket.on('getAllData', async() => {
+        console.log('it gets event fetch data from client')
+        const allIssuesData = await fethAllData()
+        console.log(allIssuesData)
+        io.emit('fetchAllData',allIssuesData) 
     })
 
 } 
@@ -110,7 +91,39 @@ io.on('connection', async(socket) => {
 
 })*/
 
+const fethAllData = async() => {
+    const config = {
+        headers:{
+            Authorization:` Bearer ${process.env.GITLAB_ACCESS_TOKEN}`
+        }
+    }
+    const {data, headers} = await axios.get(process.env.GITLAB_URL, config)
+    //console.log(data)
+    const allIssuesData = data.map(issue => ({
+        id: issue.id,
+        project_id: issue.project_id,
+        title: issue.title,
+        description : issue.description,
+        state: issue.state,
+        created_at: issue.created_at,
+        closed_at: issue.closed_at,
+        labels: issue.labels,
+        closed_by: issue.closed_By ? issue.closed_By.name: null,// it s a bug, closed_by is undefined somehow
+        labels: issue.labels,
+        assignees: issue.assignees.map((assignee) => ({assignee_userName: assignee.username})),
+        author_name: issue.author.name,
+        type: issue.type,
+        assignee: issue.assignee ? issue.assignee.name : null,
+        upvotes: issue.upvotes,
+        downvotes: issue.downvotes,
+        due_date: issue.due_date,
+        web_url: issue.web_url,
+        project_url: issue.project,
 
+    }))
+
+    return allIssuesData
+}
 
 server.listen(3000, () =>{
     console.log('listening on port 3000')
