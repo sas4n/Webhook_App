@@ -67,12 +67,16 @@ socket.on('fetchAllData', (data) => {
 socket.on('issueUpdated', (issue) => {
     console.log('webhook')
     console.log(issue)
-   
-    socket.emit('getAllDataAfterAndIssueUpdated')
+    
+    notificationBtn.classList.add('new-notification')
+    socket.emit('getAllDataAfterAnIssueUpdated')
 })
 
 socket.on('updateThePage', (data) => {
-    console.log('what is happening')
+})
+
+socket.on('issueDataFromServer', (data) => {
+    console.log(data)
 })
 
 previousButton.addEventListener('click', () => {
@@ -87,6 +91,7 @@ nextButton.addEventListener('click', () => {
 
 notificationBtn.addEventListener('click', () => {
     notificaionBody.classList.toggle('hidden')
+    notificationBtn.classList.remove('new-notification')
 })
 
 
@@ -99,7 +104,6 @@ const handlePageNumber = (totalPages) => {
         pageNumberContainer.appendChild(pageNumberDiv)
         pageNumberDiv.addEventListener('click', () => pageNumberPressedHandler(i))
     }
-   
 }
 
 
@@ -133,9 +137,16 @@ const pageNumberPressedHandler = (index)=> {
 const notificationUpdateHandler = (issue) => {
     const notificationBox = notificationTemplate.content.cloneNode(true)
     const notification = notificationBox.querySelector('#notification')
+    notification.setAttribute('data-issue-iid', issue.iid)
+    notification.addEventListener('click', () => fetchIssueDetails(issue))
     const text = document.createTextNode(`Issue ${issue.title} was updated ${dayjs(issue.updated_at).fromNow()}`)
     notification.appendChild(text)
     notificaionBody.appendChild(notification)
+}
+
+const fetchIssueDetails = (issue) => {
+    console.log(issue.iid)
+    socket.emit('fetchIssueById', issue.iid)
 }
 
 const nextButtonStatus = () => {

@@ -55,9 +55,15 @@
     margin: 2px;
     border: 1px solid #fff685;
 }
-
+.notification:hover {
+    background-color: #056baf;
+    cursor: pointer;
+}
 .notification-btn:hover {
     background-color:#f7eb4a
+}
+.new-notification {
+    background-color: #7575dd;
 }
 
 .issues-data-container,
