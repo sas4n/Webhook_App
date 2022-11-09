@@ -4,13 +4,67 @@
     font-family: 'Times New Roman', Times, serif;
 }
 
+.navbar-container {
+    display: flex;
+    margin-top: 10px;
+    width: 90vw;
+    justify-content: center;
+    height: 40px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+    width: 90%;
+    background-color: #005995;
+    align-items: center;
+    border-radius: 3px;
+}
+
+.notification-container {
+    display: flex;
+    width: 200px;
+    flex-direction: column;
+    position: relative;
+}
+
+.notification-btn {
+    width: 90%;
+    border-radius: 3px;
+    background-color: #fff685;
+    border: none; 
+    color: #000;
+}
+
+.notification-body {
+    width: 90%;
+    height: 150px;
+    position: absolute;
+    top: 18px;
+    background-color: #005995;
+    color: #fff;
+    display:flex;
+    flex-direction: column;
+    overflow-x: auto;
+    z-index: 10;
+    align-items:center;
+}
+.notification {
+    width: 90%;
+    font-size:12px;
+    margin: 2px;
+    border: 1px solid #fff685;
+}
+
+.notification-btn:hover {
+    background-color:#f7eb4a
+}
+
 .issues-data-container,
 .pagination-container {
     display: flex;
     flex-flow: row wrap;
 
-    
-    
 }
 
 .pagination-container{
@@ -113,7 +167,8 @@ p {
     padding: 5px;
 }
 
-p::-webkit-scrollbar {
+p::-webkit-scrollbar,
+.notification-body::-webkit-scrollbar {
     display: none; /* for Chrome, Safari, and Opera */
   }
 

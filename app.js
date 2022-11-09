@@ -19,6 +19,7 @@ io.on('connection', async(socket) => {
 
 
     app.post('/gitlab', async(req, res) => {
+        console.log('post')
         if(req.headers['x-gitlab-token'] === process.env.GITLAB_SECRET_KEY){
             console.log('post from gitlab')
             const {body} = req
@@ -48,10 +49,9 @@ io.on('connection', async(socket) => {
         //res.set('Authorization', `Bearer ${process.env.GITLAB_ACCESS_TOKEN}`)
         
     })
-    socket.on('getAllData', async() => {
+    socket.on('getAllDataAfterAndIssueUpdated', async() => {
         console.log('it gets event fetch data from client')
         const allIssuesData = await fethAllData()
-        console.log(allIssuesData)
         io.emit('fetchAllData',allIssuesData) 
     })
 
@@ -98,7 +98,7 @@ const fethAllData = async() => {
         }
     }
     const {data, headers} = await axios.get(process.env.GITLAB_URL, config)
-    //console.log(data)
+   // data.forEach(issue => console.log(issue))
     const allIssuesData = data.map(issue => ({
         id: issue.id,
         project_id: issue.project_id,
@@ -119,6 +119,7 @@ const fethAllData = async() => {
         due_date: issue.due_date,
         web_url: issue.web_url,
         project_url: issue.project,
+        updated_at: issue.updated_at
 
     }))
 

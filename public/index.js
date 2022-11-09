@@ -1,11 +1,13 @@
-
+dayjs.extend(window.dayjs_plugin_relativeTime)
 const issuesContainer = document.querySelector('#issues-data-container')
 const pageNumberContainer = document.querySelector('#pagination-number-container')
 const nextButton = document.querySelector('#next-page')
 const previousButton = document.querySelector('#previous-page')
+const notificationBtn = document.querySelector('#notification-btn')
+const notificaionBody = document.querySelector('#notification-body')
 
 const issueDataTemplate = document.querySelector('#issue-box-template')
-const dueDateTemplate = document.querySelector('#due-date-template')
+const notificationTemplate = document.querySelector('#notification-template')
 
 const pageLimit = 4
 let issuesData 
@@ -16,7 +18,6 @@ let currentPageNumber = 1
 let socket = io()
 
 socket.on('fetchAllData', (data) => {
-    //issueData = JSON.parse(issueData)
     issuesContainer.replaceChildren()
     pageNumberContainer.replaceChildren()
     issuesData = data
@@ -45,22 +46,16 @@ socket.on('fetchAllData', (data) => {
         author.textContent = issue.author_name
         issue.labels.forEach(label => {labels.textContent += label + ' ' } )
         issue.assignees.forEach(assignee => assignees.textContent += assignee.assignee_userName + ', ')
-        createdAt.textContent = issue.created_at
-        issue.state === 'closed' ? closedAt.textContent = issue.closed_at : closedAt.textContent='_',
+        createdAt.textContent = new Date(issue.created_at).toLocaleString()
+        issue.state === 'closed' ? closedAt.textContent = new Date(issue.closed_at).toLocaleString() : closedAt.textContent='_',
         state.textContent = issue.state
         issue.state === 'opened' ? state.classList.add('opened') : state.classList.remove('opened')
         issue.due_date ? (dueDate.textContent=issue.due_date) : ''
         issue.closed_by ? (closedBy.textContent=issue.closed_by) : ''
         upvotes.textContent = issue.upvotes
         downvotes.textContent = issue.downvotes
-        issuesContainer.appendChild(issueBody)
-        //const header = document.querySelector('h4')
-        
-        //const description = document.createElement
-       
-        
-        
-        
+        issuesContainer.appendChild(issueBody) 
+        notificationUpdateHandler(issue)
     })
     
     handlePageNumber(totalPages)
@@ -72,7 +67,8 @@ socket.on('fetchAllData', (data) => {
 socket.on('issueUpdated', (issue) => {
     console.log('webhook')
     console.log(issue)
-    socket.emit('getAllData')
+   
+    socket.emit('getAllDataAfterAndIssueUpdated')
 })
 
 socket.on('updateThePage', (data) => {
@@ -87,6 +83,10 @@ previousButton.addEventListener('click', () => {
 nextButton.addEventListener('click', () => {
     currentPageNumber++
     setCurrentPage(currentPageNumber)
+})
+
+notificationBtn.addEventListener('click', () => {
+    notificaionBody.classList.toggle('hidden')
 })
 
 
@@ -128,6 +128,14 @@ const pageNumberPressedHandler = (index)=> {
     previousButtonStatus()*/
     setCurrentPage(index)
     
+}
+
+const notificationUpdateHandler = (issue) => {
+    const notificationBox = notificationTemplate.content.cloneNode(true)
+    const notification = notificationBox.querySelector('#notification')
+    const text = document.createTextNode(`Issue ${issue.title} was updated ${dayjs(issue.updated_at).fromNow()}`)
+    notification.appendChild(text)
+    notificaionBody.appendChild(notification)
 }
 
 const nextButtonStatus = () => {

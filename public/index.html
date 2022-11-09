@@ -7,9 +7,19 @@
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="css/css/fontawesome.css">
     <link rel="stylesheet" href="css/css/solid.css">
-    <title>Document</title>
+    <title>Gitlab Issues</title>
 </head>
 <body>
+    <nav class="navbar-container">
+        <div class="navbar">
+            <div class="notification-container">
+                <button type="button" class="notification-btn" id="notification-btn">Notification</button>
+                <div class="notification-body hidden" id="notification-body">
+                    
+                </div>
+            </div>
+        </div>
+    </nav>
     <div class="pagination-container">
        <button class="navigation-btn" id="previous-page">&lt;</button>
        <div class="issues-data-container" id="issues-data-container"></div>
@@ -77,10 +87,12 @@
         
     </div>
 </template>
-<template id="due-date-template">
-   
+<template id="notification-template" class="notification-template">
+   <div class="notification" id="notification"></div>
 </template>
 </body>
 <script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.6/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.6/plugin/relativeTime.min.js"></script>
 <script src="index.js" defer></script>
 </html>
