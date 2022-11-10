@@ -26,6 +26,11 @@
     margin-left: 5px;
 }
 
+.fa-solid.fa-house:hover {
+    font-size: 1.3em;
+    cursor: pointer;
+}
+
 .notification-container {
     display: flex;
     width: 200px;

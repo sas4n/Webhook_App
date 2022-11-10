@@ -3,13 +3,25 @@ const http = require('http')
 const axios = require('axios')
 require('dotenv').config()
 const app = express()
-const path = require('path')
 const server = http.createServer(app)
 const io = require('socket.io')(server)
+const hbs = require('express-handlebars')
+const {join} = require('path')
+
+app.engine('.hbs', hbs({
+    extname: '.hbs',
+    partialsDir: join(__dirname, 'views', 'partials'),
+    defaultLayout: join(__dirname, 'views', 'layout', 'default')
+}))
+
+app.set('view engine', '.hbs')
+app.set('views', join(__dirname, 'views'))
 
 app.use(express.json())
 app.use(express.urlencoded({extended : false}))
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(join(__dirname, 'public')))
+
+app.use('/issues', require('./routes/issuesouter'))
 
 io.on('connection', async(socket) => {
     console.log('user connected')
@@ -23,7 +35,7 @@ io.on('connection', async(socket) => {
         if(req.headers['x-gitlab-token'] === process.env.GITLAB_SECRET_KEY){
             console.log('post from gitlab')
             const {body} = req
-            //console.log(body)
+            console.log(body)
         const issue = {
             event_type : body.event_type,
             owner_name : body.user.name,
@@ -31,12 +43,13 @@ io.on('connection', async(socket) => {
             project_description : body.project.description,
             issue_description : body.object_attributes.description,
             created_at : body.object_attributes.created_at,
-            title: body.object_attributes.title,
+            title: body.object_attributes.title ? body.object_attributes.title : body.issue.title ,
             updated_at: body.object_attributes.updated_at,
             state: body.object_attributes.state,
             assignees: body.assignees ? body.assignees.map(assignee => ({username: assignee.username})): null,
             labels: body.labels ? body.labels.map(label => ({name: label.name})): null
         }
+        console.log(issue)
         io.emit('issueUpdated', issue)
         
         res.status(201)

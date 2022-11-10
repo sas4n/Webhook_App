@@ -40,6 +40,7 @@ socket.on('issueDataFromServer', (data) => {
 })
 
 homeButton.addEventListener('click', () => {
+    console.log('home button clicked')
     socket.emit('fetchAllIssuesData')
 })
 
