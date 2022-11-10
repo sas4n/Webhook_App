@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 io.on('connection', async(socket) => {
     console.log('user connected')
     const allIssuesData = await fethAllData()
-    socket.emit('fetchAllData', allIssuesData)
+    socket.emit('allIssuesDataFromServer', allIssuesData)
 
 
 
@@ -50,10 +50,10 @@ io.on('connection', async(socket) => {
         //res.set('Authorization', `Bearer ${process.env.GITLAB_ACCESS_TOKEN}`)
         
     })
-    socket.on('getAllDataAfterAnIssueUpdated', async() => {
+    socket.on('fetchAllIssuesData', async() => {
         console.log('it gets event fetch data from client')
         const allIssuesData = await fethAllData()
-        io.emit('fetchAllData',allIssuesData) 
+        io.emit('allIssuesDataFromServer',allIssuesData) 
     })
 
     socket.on('fetchIssueById', async(iid) => {

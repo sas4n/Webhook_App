@@ -14,11 +14,16 @@
 
 .navbar {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     width: 90%;
     background-color: #005995;
     align-items: center;
     border-radius: 3px;
+}
+
+.fa-solid.fa-house {
+    color: #fff685;
+    margin-left: 5px;
 }
 
 .notification-container {
@@ -50,10 +55,10 @@
     align-items:center;
 }
 .notification {
-    width: 90%;
+    width: 100%;
     font-size:12px;
-    margin: 2px;
-    border: 1px solid #fff685;
+    margin-bottom: 7px;
+    padding: 4px;
 }
 .notification:hover {
     background-color: #056baf;

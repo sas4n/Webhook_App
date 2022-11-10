@@ -5,6 +5,7 @@ const nextButton = document.querySelector('#next-page')
 const previousButton = document.querySelector('#previous-page')
 const notificationBtn = document.querySelector('#notification-btn')
 const notificaionBody = document.querySelector('#notification-body')
+const homeButton = document.querySelector('#home-button')
 
 const issueDataTemplate = document.querySelector('#issue-box-template')
 const notificationTemplate = document.querySelector('#notification-template')
@@ -16,7 +17,7 @@ let currentPageNumber = 1
 
 let socket = io()
 
-socket.on('fetchAllData', (data) => {
+socket.on('allIssuesDataFromServer', (data) => {
     //First we remove everything from before to prevent adding all issue boxes again to current boxes
     issuesContainer.replaceChildren()
     pageNumberContainer.replaceChildren()
@@ -31,11 +32,15 @@ socket.on('issueUpdated', (issue) => {
     const notification = createNewNotification(issue)
     notificaionBody.prepend(notification)
     notificationBtn.classList.add('new-notification')
-    socket.emit('getAllDataAfterAnIssueUpdated')
+    socket.emit('fetchAllIssuesData')
 })
 
 socket.on('issueDataFromServer', (data) => {
     console.log(data)
+})
+
+homeButton.addEventListener('click', () => {
+    socket.emit('fetchAllIssuesData')
 })
 
 previousButton.addEventListener('click', () => {
