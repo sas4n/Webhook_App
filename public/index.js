@@ -10,7 +10,6 @@ const issueDataTemplate = document.querySelector('#issue-box-template')
 const notificationTemplate = document.querySelector('#notification-template')
 
 const pageLimit = 4
-let issuesData 
 let totalPages
 let currentPageNumber = 1
 
@@ -18,64 +17,21 @@ let currentPageNumber = 1
 let socket = io()
 
 socket.on('fetchAllData', (data) => {
+    //First we remove everything from before to prevent adding all issue boxes again to current boxes
     issuesContainer.replaceChildren()
     pageNumberContainer.replaceChildren()
-    issuesData = data
-    
-    
-    totalPages = Math.ceil(issuesData.length / pageLimit)
-    console.log('fetchdata from server received')
-    console.log(issuesData)
-    issuesData.forEach((issue) => {
-        const issueBody = issueDataTemplate.content.cloneNode(true)
-        //console.log(issueBody.innerHTML)
-        const issueBox = issueBody.querySelector('.issue-box')
-        const header = issueBody.querySelector('#issue-title')
-        const description = issueBody.querySelector('textarea')
-        const author = issueBody.querySelector('#issue-author')
-        const assignees = issueBody.querySelector('#issue-assignees')
-        const labels = issueBody.querySelector('#issue-labels')
-        const createdAt = issueBody.querySelector('#issue-created-at')
-        const closedAt = issueBody.querySelector('#issue-closed-at')
-        const state = issueBody.querySelector('#issue-state')
-        const closedBy = issueBody.querySelector('#issue-closed-by')
-        const dueDate = issueBody.querySelector('#issue-due-date')
-        const upvotes = issueBody.querySelector('#issue-upvote')
-        const downvotes = issueBody.querySelector('#issue-downvote')
-        
-        header.textContent = issue.title
-        description.value = issue.description
-        author.textContent = issue.author_name
-        issue.labels.forEach(label => {labels.textContent += label + ' ' } )
-        issue.assignees.forEach(assignee => assignees.textContent += assignee.assignee_userName + ', ')
-        createdAt.textContent = new Date(issue.created_at).toLocaleString()
-        issue.state === 'closed' ? closedAt.textContent = new Date(issue.closed_at).toLocaleString() : closedAt.textContent='_',
-        state.textContent = issue.state
-        issue.state === 'opened' ? state.classList.add('opened') : state.classList.remove('opened')
-        issue.due_date ? (dueDate.textContent=issue.due_date) : ''
-        issue.closed_by ? (closedBy.textContent=issue.closed_by) : ''
-        upvotes.textContent = issue.upvotes
-        downvotes.textContent = issue.downvotes
-        issuesContainer.appendChild(issueBody) 
-    })
-    notificationUpdateHandler(issuesData)
-    
+    totalPages = Math.ceil(data.length / pageLimit)
+    data.forEach(issue => prepareIssueBox(issue))
+    notificationUpdateHandler(data)
     handlePageNumber(totalPages)
-    setCurrentPage(1)
-    
-    
+    setCurrentPage(1) 
 })
 
 socket.on('issueUpdated', (issue) => {
-    console.log('webhook')
-    console.log(issue)
     const notification = createNewNotification(issue)
     notificaionBody.prepend(notification)
     notificationBtn.classList.add('new-notification')
     socket.emit('getAllDataAfterAnIssueUpdated')
-})
-
-socket.on('updateThePage', (data) => {
 })
 
 socket.on('issueDataFromServer', (data) => {
@@ -97,7 +53,6 @@ notificationBtn.addEventListener('click', () => {
     notificationBtn.classList.remove('new-notification')
 })
 
-
 const handlePageNumber = (totalPages) => {
     for(let i = 1; i <= totalPages; i++){
         const pageNumberDiv = document.createElement('div')
@@ -105,7 +60,7 @@ const handlePageNumber = (totalPages) => {
         pageNumberDiv.textContent= i
         pageNumberDiv.setAttribute('data-page-number', i)
         pageNumberContainer.appendChild(pageNumberDiv)
-        pageNumberDiv.addEventListener('click', () => pageNumberPressedHandler(i))
+        pageNumberDiv.addEventListener('click', () => setCurrentPage(i))
     }
 }
 
@@ -124,19 +79,6 @@ const setCurrentPage = (num) => {
     showCurrentPage()
 }
 
-const pageNumberPressedHandler = (index)=> {
-   // console.log(e.target.dataset.pageNumber)
-    /*const paginationNumberDivs = Array.from(document.querySelectorAll('.page-number'))
-    paginationNumberDivs.forEach(pageNumber => {
-        pageNumber.classList.remove('active')
-    })
-    e.target.classList.add('active')
-    nextButtonStatus()
-    previousButtonStatus()*/
-    setCurrentPage(index)
-    
-}
-
 const notificationUpdateHandler = (issues) => {
     //first sort the array based on the date, so we have the newest notification on top
     issues.sort((a, b) => {
@@ -151,15 +93,12 @@ const notificationUpdateHandler = (issues) => {
 const createNewNotification = (issue) => {
     const notificationBox = notificationTemplate.content.cloneNode(true)
     const notification = notificationBox.querySelector('#notification')
-    notification.setAttribute('data-issue-iid', issue.iid)
     notification.addEventListener('click', () => fetchIssueDetails(issue))
-    const text = document.createTextNode(`Issue ${issue.title} was updated ${dayjs(issue.updated_at).fromNow()}`)
-    notification.appendChild(text)
+    notification.textContent = `Issue ${issue.title} was updated ${dayjs(issue.updated_at).fromNow()}`
     return notification
 }
 
 const fetchIssueDetails = (issue) => {
-    console.log(issue.iid)
     socket.emit('fetchIssueById', issue.iid)
 }
 
@@ -178,7 +117,6 @@ const previousButtonStatus = () => {
     else { enablebutton(previousButton)}
 }
 
-
 const showCurrentPage = () => {
     const visiblePageStartIndex = (currentPageNumber-1) * pageLimit 
     const visiblePageEndIndex = currentPageNumber * pageLimit -1
@@ -187,11 +125,8 @@ const showCurrentPage = () => {
         if(index >= visiblePageStartIndex && index <= visiblePageEndIndex){
             issueDiv.classList.remove('hidden')
         }
-        else{
-            issueDiv.classList.add('hidden')
-        }
-    })
-    
+        else{issueDiv.classList.add('hidden')}
+    })  
 }
 
 const disableButton = (button) => {
@@ -202,4 +137,36 @@ const disableButton = (button) => {
 const enablebutton = (button) => {
     button.classList.remove('disabled')
     button.removeAttribute('disabled')
+}
+
+const prepareIssueBox = (issue) => {
+    const issueBody = issueDataTemplate.content.cloneNode(true)
+    const issueBox = issueBody.querySelector('.issue-box')
+    const header = issueBody.querySelector('#issue-title')
+    const description = issueBody.querySelector('textarea')
+    const author = issueBody.querySelector('#issue-author')
+    const assignees = issueBody.querySelector('#issue-assignees')
+    const labels = issueBody.querySelector('#issue-labels')
+    const createdAt = issueBody.querySelector('#issue-created-at')
+    const closedAt = issueBody.querySelector('#issue-closed-at')
+    const state = issueBody.querySelector('#issue-state')
+    const closedBy = issueBody.querySelector('#issue-closed-by')
+    const dueDate = issueBody.querySelector('#issue-due-date')
+    const upvotes = issueBody.querySelector('#issue-upvote')
+    const downvotes = issueBody.querySelector('#issue-downvote')
+    
+    header.textContent = issue.title
+    description.value = issue.description
+    author.textContent = issue.author_name
+    issue.labels.forEach(label => {labels.textContent += label + ' ' } )
+    issue.assignees.forEach(assignee => assignees.textContent += assignee.assignee_userName + ', ')
+    createdAt.textContent = new Date(issue.created_at).toLocaleString()
+    issue.state === 'closed' ? closedAt.textContent = new Date(issue.closed_at).toLocaleString() : closedAt.textContent='_',
+    state.textContent = issue.state
+    issue.state === 'opened' ? state.classList.add('opened') : state.classList.remove('opened')
+    issue.due_date ? (dueDate.textContent=issue.due_date) : ''
+    issue.closed_by ? (closedBy.textContent=issue.closed_by) : ''
+    upvotes.textContent = issue.upvotes
+    downvotes.textContent = issue.downvotes
+    issuesContainer.appendChild(issueBody)
 }
