@@ -21,6 +21,8 @@ socket.on('fetchAllData', (data) => {
     issuesContainer.replaceChildren()
     pageNumberContainer.replaceChildren()
     issuesData = data
+    
+    
     totalPages = Math.ceil(issuesData.length / pageLimit)
     console.log('fetchdata from server received')
     console.log(issuesData)
@@ -55,8 +57,8 @@ socket.on('fetchAllData', (data) => {
         upvotes.textContent = issue.upvotes
         downvotes.textContent = issue.downvotes
         issuesContainer.appendChild(issueBody) 
-        notificationUpdateHandler(issue)
     })
+    notificationUpdateHandler(issuesData)
     
     handlePageNumber(totalPages)
     setCurrentPage(1)
@@ -67,7 +69,8 @@ socket.on('fetchAllData', (data) => {
 socket.on('issueUpdated', (issue) => {
     console.log('webhook')
     console.log(issue)
-    
+    const notification = createNewNotification(issue)
+    notificaionBody.prepend(notification)
     notificationBtn.classList.add('new-notification')
     socket.emit('getAllDataAfterAnIssueUpdated')
 })
@@ -134,14 +137,25 @@ const pageNumberPressedHandler = (index)=> {
     
 }
 
-const notificationUpdateHandler = (issue) => {
+const notificationUpdateHandler = (issues) => {
+    //first sort the array based on the date, so we have the newest notification on top
+    issues.sort((a, b) => {
+        return a.updated_at < b.updated_at ? 1 : a.updated_at > b.updated_at ? -1 : 0
+    })
+    issues.forEach((issue) => {
+        const notification = createNewNotification(issue)
+        notificaionBody.appendChild(notification)
+    })
+}
+
+const createNewNotification = (issue) => {
     const notificationBox = notificationTemplate.content.cloneNode(true)
     const notification = notificationBox.querySelector('#notification')
     notification.setAttribute('data-issue-iid', issue.iid)
     notification.addEventListener('click', () => fetchIssueDetails(issue))
     const text = document.createTextNode(`Issue ${issue.title} was updated ${dayjs(issue.updated_at).fromNow()}`)
     notification.appendChild(text)
-    notificaionBody.appendChild(notification)
+    return notification
 }
 
 const fetchIssueDetails = (issue) => {

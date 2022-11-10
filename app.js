@@ -31,7 +31,7 @@ io.on('connection', async(socket) => {
             project_description : body.project.description,
             issue_description : body.object_attributes.description,
             created_at : body.object_attributes.created_at,
-            issue_title: body.object_attributes.title,
+            title: body.object_attributes.title,
             updated_at: body.object_attributes.updated_at,
             state: body.object_attributes.state,
             assignees: body.assignees ? body.assignees.map(assignee => ({username: assignee.username})): null,
