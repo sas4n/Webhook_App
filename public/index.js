@@ -72,11 +72,15 @@ const handlePageNumber = (totalPages) => {
     }
 }
 
+const allPageNumbers = Array.from(document.querySelectorAll('.page-number'))
+allPageNumbers.forEach((pageNumber, index) => pageNumber.addEventListener('click', () => setCurrentPage(index+1)));
+
+
 
 const setCurrentPage = (num) => {
     currentPageNumber = num
-    Array.from(document.querySelectorAll('.page-number')).forEach(pageNumber =>{
-        if(pageNumber.dataset.pageNumber == num){
+    allPageNumbers.forEach(pageNumber =>{
+        if(pageNumber.textContent == num){
             pageNumber.classList.add('active')
         }else{
             pageNumber.classList.remove('active')
@@ -111,7 +115,9 @@ const fetchIssueDetails = (issue) => {
 }
 
 const nextButtonStatus = () => {
-    if(document.querySelectorAll('.page-number')[totalPages-1].classList.contains('active')) {
+    const lastPageIndex = document.querySelectorAll('.page-number').length -1
+    //to check if we are currently seeing the last page
+    if(document.querySelectorAll('.page-number')[lastPageIndex].classList.contains('active')) {
         disableButton(nextButton)
     }
     else { enablebutton(nextButton)}

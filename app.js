@@ -14,7 +14,7 @@ app.engine('.hbs', engine({
     helpers:{
         forEach: (times, options) => {
             let pages= ''
-            for(let i = 0; i<times; i++) {
+            for(let i = 1; i <= times; i++) {
                 pages += options.fn({index:i})
             }
             return pages
