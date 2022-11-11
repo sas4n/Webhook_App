@@ -3,7 +3,7 @@ const axios = require('axios')
 
 const gettAllIssues = async(req, res, next) => {
     const allIssuesData = await fethAllData()
-   // console.log(allIssuesData.length)
+    allIssuesData.forEach(issue => console.log(issue.assignees))
     res.render('issues/allIssues', { allIssuesData , totalPages : Math.ceil(allIssuesData.length/4)})
 }
 

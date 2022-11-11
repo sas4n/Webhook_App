@@ -17,7 +17,7 @@ let currentPageNumber = 1
 
 let socket = io()
 
-
+document.addEventListener('DOMContentLoaded', () => setCurrentPage(1))
 /*socket.on('allIssuesDataFromServer', (data) => {
     //First we remove everything from before to prevent adding all issue boxes again to current boxes
     issuesContainer.replaceChildren()
@@ -61,7 +61,7 @@ notificationBtn.addEventListener('click', () => {
     notificationBtn.classList.remove('new-notification')
 })
 
-const handlePageNumber = (totalPages) => {
+/*const handlePageNumber = (totalPages) => {
     for(let i = 1; i <= totalPages; i++){
         const pageNumberDiv = document.createElement('div')
         pageNumberDiv.classList.add('page-number')
@@ -70,7 +70,7 @@ const handlePageNumber = (totalPages) => {
         pageNumberContainer.appendChild(pageNumberDiv)
         pageNumberDiv.addEventListener('click', () => setCurrentPage(i))
     }
-}
+}*/
 
 const allPageNumbers = Array.from(document.querySelectorAll('.page-number'))
 allPageNumbers.forEach((pageNumber, index) => pageNumber.addEventListener('click', () => setCurrentPage(index+1)));

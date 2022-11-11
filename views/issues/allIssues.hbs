@@ -15,9 +15,11 @@
                         <div class="labels-container"  id="labels-container">
                             <label for="issue-labels" > Labels: </label>
                             {{#if this.labels.length}}
-                                {{#each this.labels}}
-                                    <p class="issue-labels" id="issue-labels">{{this}}</p>
-                                {{/each}}
+                                <p class="issue-labels" id="issue-labels">
+                                    {{#each this.labels}}
+                                        {{this}}
+                                    {{/each}}
+                                </p>
                             {{/if}}
                         </div>
                         <div class="vote-container" id="vote-container">
@@ -34,9 +36,11 @@
                         <div class="assignees-container">
                             <label class="label" for="issue-assignees">Assignees:&nbsp </label>
                             {{#if this.assignees.length}}
-                                {{#each this.assignees}}
-                                    <p class="issue-assignees" id="issue-assignees"></p>
-                                {{/each}}
+                                <p class="issue-assignees" id="issue-assignees">
+                                    {{#each this.assignees}}
+                                        {{this.assignee_userName}}<br>
+                                    {{/each}}
+                                </p>
                             {{/if}}
                         </div>
                         <div class="date-container">
