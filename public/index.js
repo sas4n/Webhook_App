@@ -17,7 +17,8 @@ let currentPageNumber = 1
 
 let socket = io()
 
-socket.on('allIssuesDataFromServer', (data) => {
+
+/*socket.on('allIssuesDataFromServer', (data) => {
     //First we remove everything from before to prevent adding all issue boxes again to current boxes
     issuesContainer.replaceChildren()
     pageNumberContainer.replaceChildren()
@@ -26,9 +27,9 @@ socket.on('allIssuesDataFromServer', (data) => {
     notificationUpdateHandler(data)
     handlePageNumber(totalPages)
     setCurrentPage(1) 
-})
+})*/
 
-socket.on('issueUpdated', (issue) => {
+/*socket.on('issueUpdated', (issue) => {
     const notification = createNewNotification(issue)
     notificaionBody.prepend(notification)
     notificationBtn.classList.add('new-notification')
@@ -42,9 +43,10 @@ socket.on('issueDataFromServer', (data) => {
 homeButton.addEventListener('click', () => {
     console.log('home button clicked')
     socket.emit('fetchAllIssuesData')
-})
+})*/
 
 previousButton.addEventListener('click', () => {
+    console.log('previous btn')
     currentPageNumber--
     setCurrentPage(currentPageNumber)
 })

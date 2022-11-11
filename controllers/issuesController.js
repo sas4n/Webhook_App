@@ -1,9 +1,10 @@
 require('dotenv').config()
 const axios = require('axios')
 
-const gettAllIssues = (req, res, next) => {
+const gettAllIssues = async(req, res, next) => {
     const allIssuesData = await fethAllData()
-    res.render('issues/all-issues', allIssuesData)
+   // console.log(allIssuesData.length)
+    res.render('issues/allIssues', { allIssuesData , totalPages : Math.ceil(allIssuesData.length/4)})
 }
 
 const fethAllData = async() => {
@@ -43,3 +44,7 @@ const extractRequiredData = (issue) => ({
         state: issue.milestone.state
     }:null
 })
+
+module.exports = {
+    gettAllIssues
+}

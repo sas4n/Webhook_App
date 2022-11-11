@@ -1,0 +1,84 @@
+ <div class="pagination-container">
+       <button class="navigation-btn" id="previous-page">&lt;</button>
+       <div class="issues-data-container" id="issues-data-container">
+            {{#if allIssuesData.length}}
+                {{#each allIssuesData}}
+                    <div class="issue-box" id="issue-box">
+                        <div class="header-container">
+                            <h4 class="issue-title" id="issue-title">{{this.title}}</h4>
+                        </div>
+                        
+                        <div class="author-container">
+                            <label for="issue-author" class="">Author:&nbsp </label>
+                            <p class="issue-author" id="issue-author">{{this.author_name}}</p>
+                        </div>
+                        <div class="labels-container"  id="labels-container">
+                            <label for="issue-labels" > Labels: </label>
+                            {{#if this.labels.length}}
+                                {{#each this.labels}}
+                                    <p class="issue-labels" id="issue-labels">{{this}}</p>
+                                {{/each}}
+                            {{/if}}
+                        </div>
+                        <div class="vote-container" id="vote-container">
+                            <div class="upvote-container">
+                                <i class="fa-solid fa-thumbs-up"></i>
+                                <p class="issue-upvote" id="issue-upvote">{{this.upvote}}</p>
+                            </div>
+                            <div class="downvote-container">
+                                <i class="fa-solid fa-thumbs-down"></i>
+                                <p class="issue-downvote" id="issue-downvote">{{this.downvote}}</p>
+                            </div>
+                            
+                        </div>
+                        <div class="assignees-container">
+                            <label class="label" for="issue-assignees">Assignees:&nbsp </label>
+                            {{#if this.assignees.length}}
+                                {{#each this.assignees}}
+                                    <p class="issue-assignees" id="issue-assignees"></p>
+                                {{/each}}
+                            {{/if}}
+                        </div>
+                        <div class="date-container">
+                            <div class="created-at-container">
+                                <label for="issue-created-at">Created at: &nbsp</label>
+                                <p class="issue-created-at" id="issue-created-at">{{this.created_at}}</p>
+                            </div>
+                            <div class="closed-at-container">
+                                <label for="issue-closed-at">Closed at: &nbsp</label>
+                                <p class="issue-closed-at" id="issue-closed-at">{{this.closed_at}}</p>
+                            </div> 
+                        </div>
+                        <div class="description-container"> 
+                            <label for="issue-description">Description:</label>
+                            <textarea class="issue-description" id="issue-description" rows="5" cols="30" readonly >{{this.description}}</textarea>
+                        </div>
+                        <div class="state-container">
+                            <label for="issue-state">State: </label>
+                            <p class="issue-state" id="issue-state">{{this.state}}</p>
+                        </div>  
+                        <div class="due-date-container">
+                            <label for="issue-due-date">Due Date: &nbsp</label>
+                            <p class="issue-due-date" id="issue-due-date">{{this.due_date}}</p>
+                        </div>
+                        
+                    </div>
+            {{/each}}
+            {{else}}
+            <p>No data to show yet</p>
+        {{/if}}
+        </div>
+        <button class="navigation-btn" id="next-page">&gt;</button>
+        <div class="pagination-number-container" id="pagination-number-container">
+           {{#forEach totalPages}}
+                <div class="page-number">{{index}}</div>
+           {{/forEach}}
+        </div>
+    </div> 
+    <div class="issue-updated-container" id="issue-updated-container">
+        <div class="issue-message-container">
+            <p class="issue-message" id="issue-message"></p>
+        </div>
+        
+    </div>
+   

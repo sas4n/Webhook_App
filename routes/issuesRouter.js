@@ -1,8 +1,6 @@
 const router = require('express').Router()
-
-router.get('/all-issues', (req, res) => {
-
-})
+const {gettAllIssues} = require('../controllers/issuesController')
+router.get('/all-issues', gettAllIssues)
 
 router.get('/issue/:iid', (req, res) => {
 
