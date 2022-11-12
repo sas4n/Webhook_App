@@ -6,8 +6,20 @@ const axios = require('axios')
 
 const gettAllIssues = async(req, res, next) => {
     const allIssuesData = await fethAllData()
+    const notificationData = allIssuesData.map(issue =>({
+        title: issue.title,
+        updated_at: issue.updated_at,
+        updated_from_now: dayjs(issue.updated_at).fromNow()
+    }))
+    notificationData.sort((a, b) => {
+        return a.updated_at < b.updated_at ? 1 : a.updated_at > b.updated_at ? -1 : 0
+    })
     allIssuesData.forEach(issue => console.log(issue.assignees))
-    res.render('issues/allIssues', { allIssuesData , totalPages : Math.ceil(allIssuesData.length/4)})
+    res.render('issues/allIssues', { 
+        allIssuesData,
+        totalPages : Math.ceil(allIssuesData.length/4),
+        notificationData
+    })
 }
 
 const fethAllData = async() => {
@@ -41,7 +53,6 @@ const extractRequiredData = (issue) => ({
     due_date: issue.due_date,
     web_url: issue.web_url,
     updated_at: issue.updated_at,
-    updated_from_now: dayjs(issue.updated_at).fromNow(),
     milestone: issue.milestone ? {
         title: issue.milestone.title,
         due_date: issue.milestone.due_date,
