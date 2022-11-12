@@ -1,4 +1,7 @@
 require('dotenv').config()
+const dayjs = require('dayjs')
+const relativeTime = require('dayjs/plugin/relativeTime')
+dayjs.extend(relativeTime)
 const axios = require('axios')
 
 const gettAllIssues = async(req, res, next) => {
@@ -38,6 +41,7 @@ const extractRequiredData = (issue) => ({
     due_date: issue.due_date,
     web_url: issue.web_url,
     updated_at: issue.updated_at,
+    updated_from_now: dayjs(issue.updated_at).fromNow(),
     milestone: issue.milestone ? {
         title: issue.milestone.title,
         due_date: issue.milestone.due_date,

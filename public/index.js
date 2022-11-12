@@ -38,12 +38,12 @@ document.addEventListener('DOMContentLoaded', () => setCurrentPage(1))
 
 socket.on('issueDataFromServer', (data) => {
     console.log(data)
-})
+})*/
 
 homeButton.addEventListener('click', () => {
     console.log('home button clicked')
     socket.emit('fetchAllIssuesData')
-})*/
+})
 
 previousButton.addEventListener('click', () => {
     console.log('previous btn')
@@ -106,7 +106,7 @@ const createNewNotification = (issue) => {
     const notificationBox = notificationTemplate.content.cloneNode(true)
     const notification = notificationBox.querySelector('#notification')
     notification.addEventListener('click', () => fetchIssueDetails(issue))
-    notification.textContent = `Issue ${issue.title} was updated ${dayjs(issue.updated_at).fromNow()}`
+    notification.textContent = ``
     return notification
 }
 
