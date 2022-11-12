@@ -102,6 +102,9 @@ const notificationUpdateHandler = (issues) => {
     })
 }
 
+const allNotifications = Array.from(document.querySelectorAll('.notification'))
+allNotifications.forEach((notification) => notification.addEventListener('click', () => console.log('notification clicked')))
+
 const createNewNotification = (issue) => {
     const notificationBox = notificationTemplate.content.cloneNode(true)
     const notification = notificationBox.querySelector('#notification')
