@@ -6,6 +6,7 @@ const server = http.createServer(app)
 const io = require('socket.io')(server)
 const {engine} = require('express-handlebars')
 const {join} = require('path')
+const marked = require('marked')
 
 app.engine('.hbs', engine({
     extname: '.hbs',
@@ -18,7 +19,7 @@ app.engine('.hbs', engine({
                 pages += options.fn({index:i})
             }
             return pages
-        }
+        },
     }
 }))
 
@@ -130,7 +131,7 @@ const fetchIssueById = async(iid) => {
     }
     console.log(process.env.GITLAB_URL_FETCH_ISSUE_BY_ID+iid)
     const {data} = await axios.get(process.env.GITLAB_URL_FETCH_ISSUE_BY_ID+iid, config)
-    console.log(data)
+   // console.log(data)
     const issueData = extractRequiredData(data)
     return issueData
     //console.log(issueData)

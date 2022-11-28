@@ -17,7 +17,37 @@ let currentPageNumber = 1
 
 let socket = io()
 
-document.addEventListener('DOMContentLoaded', () => setCurrentPage(1))
+document.addEventListener('DOMContentLoaded', () => {
+    if(document.title === 'All Issues') {
+        setCurrentPage(1)
+        previousButton.addEventListener('click', () => {
+            console.log('previous btn')
+            currentPageNumber--
+            setCurrentPage(currentPageNumber)
+        })
+        
+        nextButton.addEventListener('click', () => {
+            currentPageNumber++
+            setCurrentPage(currentPageNumber)
+        })
+    }
+    //
+    const comments = Array.from(document.querySelectorAll('.comments'))
+    //console.log(comments)
+    comments.forEach(comment => {
+       // console.log(comment.textContent)
+       //convert string containing html elements to html elements
+       const commentConvertedToHtml = new DOMParser().parseFromString(comment.textContent,'text/html').documentElement
+       console.log(commentConvertedToHtml)
+       comment.replaceChildren()
+       comment.appendChild(commentConvertedToHtml)
+      //comment.innerHTML=commentConvertedToHtml
+        //comment.innerHTML = new DOMParser().parseFromString(comment.textContent,'text/html').body.innerHTML
+       // comment.innerHTML = marked.parse(comment.innerHTML)
+       // console.log(comment)
+    })
+
+})
 /*socket.on('allIssuesDataFromServer', (data) => {
     //First we remove everything from before to prevent adding all issue boxes again to current boxes
     issuesContainer.replaceChildren()
@@ -45,16 +75,7 @@ homeButton.addEventListener('click', () => {
     socket.emit('fetchAllIssuesData')
 })
 
-previousButton.addEventListener('click', () => {
-    console.log('previous btn')
-    currentPageNumber--
-    setCurrentPage(currentPageNumber)
-})
 
-nextButton.addEventListener('click', () => {
-    currentPageNumber++
-    setCurrentPage(currentPageNumber)
-})
 
 notificationBtn.addEventListener('click', () => {
     notificaionBody.classList.toggle('hidden')
@@ -103,7 +124,7 @@ const notificationUpdateHandler = (issues) => {
 }
 
 const allNotifications = Array.from(document.querySelectorAll('.notification'))
-allNotifications.forEach((notification) => notification.addEventListener('click', () => console.log('notification clicked')))
+allNotifications.forEach((notification) => notification.addEventListener('click', (e) => console.log(e.target.id)))
 
 const createNewNotification = (issue) => {
     const notificationBox = notificationTemplate.content.cloneNode(true)
