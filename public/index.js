@@ -33,18 +33,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     //
     const comments = Array.from(document.querySelectorAll('.comments'))
-    //console.log(comments)
     comments.forEach(comment => {
-       // console.log(comment.textContent)
        //convert string containing html elements to html elements
        const commentConvertedToHtml = new DOMParser().parseFromString(comment.textContent,'text/html').documentElement
        console.log(commentConvertedToHtml)
        comment.replaceChildren()
        comment.appendChild(commentConvertedToHtml)
-      //comment.innerHTML=commentConvertedToHtml
-        //comment.innerHTML = new DOMParser().parseFromString(comment.textContent,'text/html').body.innerHTML
-       // comment.innerHTML = marked.parse(comment.innerHTML)
-       // console.log(comment)
     })
 
 })
@@ -72,7 +66,10 @@ socket.on('issueDataFromServer', (data) => {
 
 homeButton.addEventListener('click', () => {
     console.log('home button clicked')
-    socket.emit('fetchAllIssuesData')
+    
+     window.location.href= 'http://localhost:3000/issues/all-issues'
+        
+    //socket.emit('fetchAllIssuesData')
 })
 
 
