@@ -53,16 +53,28 @@ document.addEventListener('DOMContentLoaded', () => {
     setCurrentPage(1) 
 })*/
 
-/*socket.on('issueUpdated', (issue) => {
-    const notification = createNewNotification(issue)
+socket.on('issueUpdated', (issue) => {
+    console.log('recieved the updated issue')
+   // const notification = createNewNotification(issue)
+    console.log('this')
+    const notification = document.createElement('div')
+    notification.classList.add('notification')
+    
+    const anchor = document.createElement('a')
+    anchor.classList.add('notification-link')
+    console.log(`/issues/issue/${issue.iid}`)
+    anchor.href = `/issues/issue/${issue.iid}`
+    anchor.textContent = `Issue ${issue.title} was updated ${issue.updated_from_now}`
+    notification.appendChild(anchor)
     notificaionBody.prepend(notification)
+    console.log('this' + notificationBtn)
     notificationBtn.classList.add('new-notification')
     socket.emit('fetchAllIssuesData')
 })
 
 socket.on('issueDataFromServer', (data) => {
     console.log(data)
-})*/
+})
 
 homeButton.addEventListener('click', () => {
     console.log('home button clicked')
@@ -124,7 +136,9 @@ const allNotifications = Array.from(document.querySelectorAll('.notification'))
 allNotifications.forEach((notification) => notification.addEventListener('click', (e) => console.log(e.target.id)))
 
 const createNewNotification = (issue) => {
+    console.log('line 130')
     const notificationBox = notificationTemplate.content.cloneNode(true)
+    console.log('line 131')
     const notification = notificationBox.querySelector('#notification')
     notification.addEventListener('click', () => fetchIssueDetails(issue))
     notification.textContent = ``
