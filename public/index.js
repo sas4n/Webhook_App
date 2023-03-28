@@ -69,7 +69,8 @@ socket.on('issueUpdated', (issue) => {
     notificaionBody.prepend(notification)
     console.log('this' + notificationBtn)
     notificationBtn.classList.add('new-notification')
-    socket.emit('fetchAllIssuesData')
+    prepareIssueBox(issue)
+   // socket.emit('fetchAllIssuesData')
 })
 
 socket.on('issueDataFromServer', (data) => {
@@ -203,13 +204,36 @@ const prepareIssueBox = (issue) => {
     const dueDate = issueBody.querySelector('#issue-due-date')
     const upvotes = issueBody.querySelector('#issue-upvote')
     const downvotes = issueBody.querySelector('#issue-downvote')
+    console.log(issue.iid)
+    const issueToBeUpdated = document.querySelector(`#issue-box-${issue.iid}`)
     
+    
+    
+    issueBox.id = `issue-box-${issue.iid}`
     header.textContent = issue.title
-    description.value = issue.description
-    author.textContent = issue.author_name
-    issue.labels.forEach(label => {labels.textContent += label + ' ' } )
-    issue.assignees.forEach(assignee => assignees.textContent += assignee.assignee_userName + ', ')
+    description.value = issue.issue_description
+    dueDate.textContent = issue.due_date
+    console.log(author)
+    author.innerText = issue.owner_name
+    issue.labels.forEach(label => {
+        const paragraph = document.createElement('p')
+        paragraph.textContent = label.name
+        labels.appendChild(paragraph)
+    } )
+    console.log(issue.labels)
+    console.log(issue.assignees)
+    if(issue.assignees){
+        issue.assignees.forEach(assignee => {
+        
+            const paragraph = document.createElement('p')
+            paragraph.textContent = assignee.username
+            assignees.appendChild(paragraph)
+        })
+    }
+    
+    console.log('nopeeeee')
     createdAt.textContent = new Date(issue.created_at).toLocaleString()
+    closedAt.textContent = new Date(issue.closed_at).toLocaleString()
     issue.state === 'closed' ? closedAt.textContent = new Date(issue.closed_at).toLocaleString() : closedAt.textContent='_',
     state.textContent = issue.state
     issue.state === 'opened' ? state.classList.add('opened') : state.classList.remove('opened')
@@ -217,5 +241,6 @@ const prepareIssueBox = (issue) => {
     issue.closed_by ? (closedBy.textContent=issue.closed_by) : ''
     upvotes.textContent = issue.upvotes
     downvotes.textContent = issue.downvotes
-    issuesContainer.appendChild(issueBody)
+    console.log(issueBox)
+    issuesContainer.replaceChild(issueBox, issueToBeUpdated)
 }

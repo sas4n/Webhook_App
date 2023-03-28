@@ -55,9 +55,11 @@ io.on('connection', async(socket) => {
             created_at : body.object_attributes.created_at,
             title: body.object_attributes.title ? body.object_attributes.title : body.issue.title ,
             updated_at: body.object_attributes.updated_at,
+            closed_at: body.object_attributes.closed_at,
+            due_date: body.object_attributes.due_date,
             state: body.object_attributes.state,
             assignees: body.assignees ? body.assignees.map(assignee => ({username: assignee.username})): null,
-            labels: body.labels ? body.labels.map(label => ({name: label.name})): null,
+            labels: body.labels ? body.labels.map(label => ({name: label.title})): null,
             updated_from_now: dayjs(body.object_attributes.updated_at).fromNow()
         }
        // console.log(issue)
