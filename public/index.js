@@ -69,6 +69,7 @@ socket.on('issueUpdated', (issue) => {
     notificaionBody.prepend(notification)
     console.log('this' + notificationBtn)
     notificationBtn.classList.add('new-notification')
+    console.log('here')
     prepareIssueBox(issue)
    // socket.emit('fetchAllIssuesData')
 })
@@ -190,6 +191,7 @@ const enablebutton = (button) => {
 }
 
 const prepareIssueBox = (issue) => {
+    console.log(issue.iid)
     const issueBody = issueDataTemplate.content.cloneNode(true)
     const issueBox = issueBody.querySelector('.issue-box')
     const header = issueBody.querySelector('#issue-title')
@@ -206,7 +208,11 @@ const prepareIssueBox = (issue) => {
     const downvotes = issueBody.querySelector('#issue-downvote')
     console.log(issue.iid)
     const issueToBeUpdated = document.querySelector(`#issue-box-${issue.iid}`)
-    
+    if(issueBox.hasAttribute('id')){
+        console.log('has')
+        issueBox.classList.remove('issue-box')
+        issueBox.classList.add('single-issue-box')
+    }
     
     
     issueBox.id = `issue-box-${issue.iid}`
