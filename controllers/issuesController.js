@@ -78,6 +78,7 @@ const fetchIssueByIdFromGitlab = async (issue_iid) => {
     const issueData = extractRequiredData(data)
     return issueData
 }
+
 const extractRequiredData = (issue) => ({
     id: issue.id,
     iid: issue.iid,
