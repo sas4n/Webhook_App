@@ -8,7 +8,7 @@ const {engine} = require('express-handlebars')
 const {join} = require('path')
 const {postFromGitlab} = require('./controllers/webHookController')
 
-
+const port = process.env.PORT || 3000
 app.engine('.hbs', engine({
     extname: '.hbs',
     partialsDir: join(__dirname, 'views', 'partials'),
@@ -41,6 +41,6 @@ io.on('connection', async(socket) => {
     postFromGitlab(io,app) 
 })
 
-server.listen(3000, () =>{
-    console.log('listening on port 3000')
+server.listen(port, () =>{
+    console.log(`listening on port ${port}`)
 })
