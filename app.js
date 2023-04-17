@@ -32,12 +32,13 @@ app.use(express.json())
 app.use(express.urlencoded({extended : false}))
 app.use(express.static(join(__dirname, 'public')))
 
+app.use('/', require('./routes/homeRouter'))
 app.use('/issues', require('./routes/issuesRouter'))
 
 io.on('connection', async(socket) => {
     console.log('user connected')
     //app.use('/gitlab', require('./routes/webHookRouter'))
-    postFromGitlab(io,app)
+    postFromGitlab(io,app) 
 })
 
 server.listen(3000, () =>{

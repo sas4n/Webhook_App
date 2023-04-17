@@ -3,7 +3,28 @@
     box-sizing: border-box;
     font-family: 'Times New Roman', Times, serif;
 }
+ .container {
+     display: flex;
+     width: 90%;
+     flex-direction: column;
+     align-items: center;
+     justify-content: space-evenly;
+     height: 60vh;
+ }
 
+ .home-form {
+     width: 100%;
+     display: flex;
+     justify-content:center;
+ }
+
+ #issues-btn {
+     width: 30%;
+     color: white;
+     background-color: #005995;
+     height: 40px;
+    border-radius: 3px;
+ }
 .navbar-container {
     display: flex;
     margin-top: 10px;

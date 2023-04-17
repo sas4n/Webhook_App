@@ -6,6 +6,7 @@ const previousButton = document.querySelector('#previous-page')
 const notificationBtn = document.querySelector('#notification-btn')
 const notificaionBody = document.querySelector('#notification-body')
 const homeButton = document.querySelector('#home-button')
+const issuesBtn = document.querySelector('#issues-btn')
 
 const issueDataTemplate = document.querySelector('#issue-box-template')
 const notificationTemplate = document.querySelector('#notification-template')
@@ -14,7 +15,7 @@ const pageLimit = 4
 let totalPages
 let currentPageNumber = 1
 
-
+ 
 let socket = io()
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -54,9 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
 })*/
 
 socket.on('issueUpdated', (issue) => {
-    console.log('recieved the updated issue')
-   // const notification = createNewNotification(issue)
-    console.log('this')
     const notification = document.createElement('div')
     notification.classList.add('notification')
     
@@ -79,10 +77,7 @@ socket.on('issueDataFromServer', (data) => {
 })
 
 homeButton.addEventListener('click', () => {
-    console.log('home button clicked')
-    
-     window.location.href= 'http://localhost:3000/issues/all-issues'
-        
+     window.location.href= 'http://localhost:3000/issues/all-issues'  
     //socket.emit('fetchAllIssuesData')
 })
 
@@ -209,7 +204,6 @@ const prepareIssueBox = (issue) => {
     console.log(issue.iid)
     const issueToBeUpdated = document.querySelector(`#issue-box-${issue.iid}`)
     if(issueBox.hasAttribute('id')){
-        console.log('has')
         issueBox.classList.remove('issue-box')
         issueBox.classList.add('single-issue-box')
     }
@@ -236,8 +230,6 @@ const prepareIssueBox = (issue) => {
             assignees.appendChild(paragraph)
         })
     }
-    
-    console.log('nopeeeee')
     createdAt.textContent = new Date(issue.created_at).toLocaleString()
     closedAt.textContent = new Date(issue.closed_at).toLocaleString()
     issue.state === 'closed' ? closedAt.textContent = new Date(issue.closed_at).toLocaleString() : closedAt.textContent='_',
@@ -247,6 +239,5 @@ const prepareIssueBox = (issue) => {
     issue.closed_by ? (closedBy.textContent=issue.closed_by) : ''
     upvotes.textContent = issue.upvotes
     downvotes.textContent = issue.downvotes
-    console.log(issueBox)
     issuesContainer.replaceChild(issueBox, issueToBeUpdated)
 }
