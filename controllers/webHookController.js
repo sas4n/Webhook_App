@@ -7,7 +7,6 @@ const postFromGitlab = (io,app) => {
     console.log('ok')
     app.post('/gitlab', (req, res) => {
         if(req.headers['x-gitlab-token'] === process.env.GITLAB_SECRET_KEY){
-            console.log('post from gitlab')
             const {body} = req
             console.log(body)
         const issue = {
@@ -27,19 +26,14 @@ const postFromGitlab = (io,app) => {
             labels: body.labels ? body.labels.map(label => ({name: label.title})): null,
             updated_from_now: dayjs(body.object_attributes.updated_at).fromNow()
         }
-       // console.log(issue)
-       console.log('it workeddddddddd')
         io.emit('issueUpdated', issue)
-        
         res.status(201)
-        
         res.send()
         }else{
             console.log('not from gitlab')
             res.status(403).json({error: new Error('You are not Authorized')})
         }
-    })
-   
+    })  
 }
 
 module.exports = {

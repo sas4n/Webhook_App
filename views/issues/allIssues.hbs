@@ -7,80 +7,86 @@
                         <div class="header-container">
                             <h4 class="issue-title" id="issue-title">{{this.title}}</h4>
                         </div>
+                        <div class="content-container">
+                            <div class="left-column">
+                                <div class="author-container">
+                                    <label for="issue-author" class="">Author:&nbsp </label>
+                                    <div class="issue-fields" id="issue-author">
+                                        <p>{{this.author_name}}</p>
+                                    </div>
+                                </div>
+                                <div class="labels-container"  id="labels-container">
+                                    <label for="issue-labels" > Labels: </label>
+                                    <div class="issue-fields" id="issue-labels">
+                                        {{#if this.labels.length}}
+                                            {{#each this.labels}}
+                                            <p>{{this}}</p> 
+                                            {{/each}}
+                                        {{/if}}
+                                    </div>
+                                </div>
+                                <div class="assignees-container">
+                                    <label class="label" for="issue-assignees">Assignees:&nbsp </label>
+                                    <div class="issue-fields" id="issue-assignees">
+                                        {{#if this.assignees.length}}  
+                                            {{#each this.assignees}}
+                                                <p>{{this.assignee_userName}}</p>
+                                            {{/each}}
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="middle-column">
+                                <div class="description-container"> 
+                                    <label for="issue-description">Description:</label>
+                                    <textarea class="issue-description" id="issue-description" rows="10" cols="20" readonly >{{this.description}}</textarea>
+                                </div>
+                                <div class="vote-container" id="vote-container">
+                                    <div class="upvote-container">
+                                        <i class="fa-solid fa-thumbs-up"></i>
+                                        <div class="issue-fields" id="issue-upvote">
+                                            <p >{{this.upvotes}}</p>
+                                        </div>
+                                    
+                                    </div>
+                                    <div class="downvote-container">
+                                        <i class="fa-solid fa-thumbs-down"></i>
+                                        <div class="issue-fields" id="issue-downvote">
+                                            <p>{{this.downvotes}}</p>
+                                        </div>
+                                    </div>   
+                                </div>
+                            </div>
                         
-                        <div class="author-container">
-                            <label for="issue-author" class="">Author:&nbsp </label>
-                            <div class="issue-fields" id="issue-author">
-                                <p>{{this.author_name}}</p>
-                            </div>
-                        </div>
-                        <div class="labels-container"  id="labels-container">
-                            <label for="issue-labels" > Labels: </label>
-                            <div class="issue-fields" id="issue-labels">
-                                {{#if this.labels.length}}
-                                    {{#each this.labels}}
-                                       <p>{{this}}</p> 
-                                    {{/each}}
-                                {{/if}}
-                            </div>
-                        </div>
-                        <div class="vote-container" id="vote-container">
-                            <div class="upvote-container">
-                                <i class="fa-solid fa-thumbs-up"></i>
-                                <div class="issue-fields" id="issue-upvote">
-                                    <p >{{this.upvotes}}</p>
+                            <div class="right-column">
+                                <div class="created-at-container">
+                                    <label for="issue-created-at">Created at: &nbsp</label>
+                                    <div class="issue-fields" id="issue-created-at">
+                                        <p>{{this.created_at}}</p>
+                                    </div>    
                                 </div>
-                               
-                            </div>
-                            <div class="downvote-container">
-                                <i class="fa-solid fa-thumbs-down"></i>
-                                <div class="issue-fields" id="issue-downvote">
-                                    <p>{{this.downvotes}}</p>
+                                <div class="closed-at-container">
+                                    <label for="issue-closed-at">Closed at: &nbsp</label>
+                                    <div class="issue-fields" id="issue-closed-at">
+                                        <p>{{this.closed_at}}</p>
+                                    </div>  
                                 </div>
-                            </div>
-                            
-                        </div>
-                        <div class="assignees-container">
-                            <label class="label" for="issue-assignees">Assignees:&nbsp </label>
-                                <div class="issue-fields" id="issue-assignees">
-                                    {{#if this.assignees.length}}  
-                                        {{#each this.assignees}}
-                                            <p>{{this.assignee_userName}}</p>
-                                        {{/each}}
-                                    {{/if}}
-                                </div>
-                        </div>
-                        <div class="date-container">
-                            <div class="created-at-container">
-                                <label for="issue-created-at">Created at: &nbsp</label>
-                                <div class="issue-fields" id="issue-created-at">
-                                    <p>{{this.created_at}}</p>
-                                </div>
-                                
-                            </div>
-                            <div class="closed-at-container">
-                                <label for="issue-closed-at">Closed at: &nbsp</label>
-                                <div class="issue-fields" id="issue-closed-at">
-                                    <p>{{this.closed_at}}</p>
+                                <div class="due-date-container">
+                                    <label for="issue-due-date">Due Date: &nbsp</label>
+                                    <div class="issue-fields" id="issue-due-date">
+                                        <p>{{this.due_date}}</p>
+                                    </div> 
                                 </div>  
-                            </div> 
+                                <div class="state-container">
+                                    <label for="issue-state">State: </label>
+                                    <div class="issue-fields" id="issue-state">
+                                        <p>{{this.state}}</p>
+                                    </div>  
+                                </div> 
+                            </div>
                         </div>
-                        <div class="description-container"> 
-                            <label for="issue-description">Description:</label>
-                            <textarea class="issue-description" id="issue-description" rows="5" cols="30" readonly >{{this.description}}</textarea>
-                        </div>
-                        <div class="state-container">
-                            <label for="issue-state">State: </label>
-                            <div class="issue-fields" id="issue-state">
-                                <p>{{this.state}}</p>
-                            </div>  
-                        </div>  
-                        <div class="due-date-container">
-                            <label for="issue-due-date">Due Date: &nbsp</label>
-                            <div class="issue-fields" id="issue-due-date">
-                                <p>{{this.due_date}}</p>
-                            </div> 
-                        </div> 
+                        
                     </div>
             {{/each}}
             {{else}}

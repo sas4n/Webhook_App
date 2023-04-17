@@ -121,6 +121,8 @@
     width: 80vw;
     height: 90%;
     padding-left: 5px;
+    overflow-x: auto;
+    justify-content: center;
 }
 
 .navigation-btn{
@@ -140,15 +142,40 @@
 
 .issue-box {
     width: 38vw;
-
+    min-width: 350px;
+    flex-direction: column;
     height: 49%;
     min-height: 260px;
     background-color: #005995;
     display: flex;
     margin: 5px;
-    flex-wrap: wrap;
     border-radius:4px;
     overflow: auto;
+}
+
+.content-container {
+    display: flex;
+    justify-content:space-between;
+}
+
+.left-column,
+.middle-column,
+.right-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.left-column,
+.right-column {
+    width: 25%;
+    
+    justify-content: space-around;
+}
+
+.middle-column {
+    width: 45%;
+    align-items: center;
+    justify-content: space-around;
 }
 
 .single-issue-box-container {
@@ -185,12 +212,12 @@
 .issue-fields {
     background-color:#fff685;
     width: 100%;
-    height: 80%;
-    min-height: 20px;
-    max-height: 30px;
+    height: 90%;
+    min-height: 30px;
     overflow: auto;
     border-radius: 4px;
     padding: 5px;
+    font-size: 10px;
 }
 
 .cell {
@@ -200,33 +227,18 @@
 
 
 .author-container,
-.assignees-container {
+.assignees-container,
+.labels-container {
     display: flex;
-    width: 45%;
+    width: 90%;
     max-width: 120px;
-    margin: 10px;
+    min-height: 30px;
+    margin: 5px;
     border-radius: 3px;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
     padding-left: 5px;
-}
-
-
-
-.labels-container {
-    display: flex;
-    margin: 10px;
-    flex-wrap: wrap;
-    width:25%;
-    height: 20%;
-}
-
-.assignees-container{
-    
-    flex-direction: column;
-    height: 20%;
-    padding: 5px;
 }
 .comments-container {
     width: 60%;
@@ -236,6 +248,7 @@
     align-items: center;
     overflow: auto;
     background-color: #fff;
+  
 }
 
 .comments {
@@ -250,18 +263,22 @@
 .description-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     margin: 5px;
-    height: 25%;
+    width: 100%;
 }
 
-
+.issue-description {
+    width :90%;
+    height: 80px;
+}
 
 
 .issue-fields::-webkit-scrollbar,
 .notification-body::-webkit-scrollbar,
 .milestone-container::-webkit-scrollbar,
-.single-issue-box::-webkit-scrollbar {
+.single-issue-box::-webkit-scrollbar,
+.issues-data-container::-webkit-scrollbar {
     display: none; /* for Chrome, Safari, and Opera */
   }
 
@@ -275,35 +292,17 @@ textarea {
 }
 
 .state-container,
-.due-date-container {
-    display: flex;
-    width: 15%;
-    min-width: 130px;
-    justify-content: flex-start;
-    height: 13%;
-    align-items: flex-start;
-    flex-direction: column;
-    font-size: 12px;
-}
-
-.date-container{
-    display: flex;
-    width: 50%;
-    max-width: 130px;
-    height: 25%;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
+.due-date-container,
 .closed-at-container,
-.created-at-container {
+.created-at-container{
     display: flex;
+    width: 90%;
     justify-content: flex-start;
+    min-height: 30px;
     align-items: flex-start;
     flex-direction: column;
-    width: 80%;
-    min-height: 48%;
-    font-size: 12px;
+    font-size: 10px;
+    margin: 5px;
 }
 
 .milestone-container {
@@ -331,8 +330,8 @@ textarea {
 
 .vote-container {
     display: flex;
-    width: 12%;
-    height: 15%;
+    width: 60%;
+    height: 50px;
     margin: 25px 0 0 5px;
     align-items: flex-end;
     background-color:#fff685;
