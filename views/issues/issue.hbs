@@ -2,182 +2,220 @@
     <div class="single-issue-box" id="issue-box-{{issueData.iid}}">
         <div class="header-container">
              <h4 class="issue-title" id="issue-title">{{issueData.title}}</h4>
-        </div>             
-        <div class="author-container">
-            <label for="issue-author" class="">Author:&nbsp </label>
-            <div class="issue-fields" id="issue-author">
-                <p>{{issueData.author_name}}</p>
-            </div>
         </div>
-        <div class="labels-container"  id="labels-container">
-            <label for="issue-labels" > Labels: </label>
-            <div class="issue-fields" id="issue-labels">
-                {{#if issueData.labels.length}}
-                    {{#each issueData.labels}}
-                        <p>{{this}}</p> 
-                    {{/each}}
-                {{/if}}
-            </div>
-        </div>
-        <div class="vote-container" id="vote-container">
-            <div class="upvote-container">
-                <i class="fa-solid fa-thumbs-up"></i>
-                <div class="issue-fields" id="issue-upvote">
-                    <p >{{issueData.upvotes}}</p>
+        <div class="content-container">
+            <aside class="left-aside">
+                <div class="author-container">
+                    <label for="issue-author" class="">Author:&nbsp </label>
+                    <div class="issue-fields" id="issue-author">
+                        <p>{{issueData.author_name}}</p>
+                    </div>
                 </div>
-                
-            </div>
-            <div class="downvote-container">
-                <i class="fa-solid fa-thumbs-down"></i>
-                <div class="issue-fields" id="issue-downvote">
-                    <p>{{issueData.downvotes}}</p>
+                <div class="labels-container"  id="labels-container">
+                    <label for="issue-labels" > Labels: </label>
+                    <div class="issue-fields" id="issue-labels">
+                        {{#if issueData.labels.length}}
+                            {{#each issueData.labels}}
+                                <p>{{this}}</p> 
+                            {{/each}}
+                        {{/if}}
+                    </div>
                 </div>
-            </div>
-            
-        </div>
-        <div class="assignees-container">
-            <label class="label" for="issue-assignees">Assignees:&nbsp </label>
-                <div class="issue-fields" id="issue-assignees">
-                    {{#if issueData.assignees.length}}  
-                        {{#each issueData.assignees}}
-                            <p>{{this.assignee_userName}}</p>
-                        {{/each}}
-                    {{/if}}
+                <div class="assignees-container">
+                    <label class="label" for="issue-assignees">Assignees:&nbsp </label>
+                        <div class="issue-fields" id="issue-assignees">
+                            {{#if issueData.assignees.length}}  
+                                {{#each issueData.assignees}}
+                                    <p>{{this.assignee_userName}}</p>
+                                {{/each}}
+                            {{/if}}
+                        </div>
                 </div>
-        </div>
-        <div class="comments-container">
-            {{#each commentsData}}
-            <div class="comments">{{this.body}}</div>
-            {{/each}}
-        </div>
-        <div class="date-container">
-            <div class="created-at-container">
-                <label for="issue-created-at">Created at: &nbsp</label>
-                <div class="issue-fields" id="issue-created-at">
-                    <p>{{issueData.created_at}}</p>
+                <div class="created-at-container">
+                    <label for="issue-created-at">Created at: &nbsp</label>
+                    <div class="issue-fields" id="issue-created-at">
+                        <p>{{issueData.created_at}}</p>
+                    </div>
+                    
                 </div>
-                
-            </div>
-            <div class="closed-at-container">
-                <label for="issue-closed-at">Closed at: &nbsp</label>
-                <div class="issue-fields" id="issue-closed-at">
-                    <p>{{issueData.closed_at}}</p>
+                <div class="closed-at-container">
+                    <label for="issue-closed-at">Closed at: &nbsp</label>
+                    <div class="issue-fields" id="issue-closed-at">
+                        <p>{{issueData.closed_at}}</p>
+                    </div>  
+                </div> 
+                <div class="state-container">
+                    <label for="issue-state">State: </label>
+                    <div class="issue-fields" id="issue-state">
+                        <p>{{issueData.state}}</p>
+                    </div>  
                 </div>  
-            </div> 
-            <div class="state-container">
-            <label for="issue-state">State: </label>
-            <div class="issue-fields" id="issue-state">
-                <p>{{issueData.state}}</p>
-            </div>  
-        </div>  
-        <div class="due-date-container">
-            <label for="issue-due-date">Due Date: &nbsp</label>
-            <div class="issue-fields" id="issue-due-date">
-                <p>{{issueData.due_date}}</p>
-            </div> 
-        </div>
-        </div>
-        <div class="description-container"> 
-            <label for="issue-description">Description:</label>
-            <textarea class="issue-description" id="issue-description" rows="5" cols="30" readonly >{{issueData.description}}</textarea>
-        </div>
-        <div class="milestone-container">
-            <label for="milestone-table">Milestone</label>
-            <div class="milestone-table-container">
-                <table class="milestone-table" id="milestone-table">
-                <thead>
-                    <tr>
-                        <th class="issue-fields milestone-title cell" id="milestone-title">Title</th>
-                        <th class="issue-fields milestone-due-date cell" id="milestone-due-date">Due Date</th>
-                        <th class="issue-fields milestone-state cell" id="milestone-state">State</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="issue-fields cell">{{issueData.milestone.title}}</td>
-                        <td class="issue-fields cell">{{issueData.milestone.due_date}}</td>
-                        <td class="issue-fields cell">{{issueData.milestone.state}}</td>
-                    </tr>
-                </tbody>
-            </table>
+                <div class="due-date-container">
+                    <label for="issue-due-date">Due Date: &nbsp</label>
+                    <div class="issue-fields" id="issue-due-date">
+                        <p>{{issueData.due_date}}</p>
+                    </div> 
+                </div>
+                <div class="vote-container" id="vote-container">
+                    <div class="upvote-container">
+                        <i class="fa-solid fa-thumbs-up"></i>
+                        <div class="issue-fields" id="issue-upvote">
+                            <p >{{issueData.upvotes}}</p>
+                        </div>
+                        
+                    </div>
+                    <div class="downvote-container">
+                        <i class="fa-solid fa-thumbs-down"></i>
+                        <div class="issue-fields" id="issue-downvote">
+                            <p>{{issueData.downvotes}}</p>
+                        </div>
+                    </div> 
+                </div>
+                <div class="milestone-container">
+                    <label for="milestone-table">Milestone</label>
+                    <div class="milestone-table-container">
+                        <table class="milestone-table" id="milestone-table">
+                        <thead>
+                            <tr>
+                                <th class="issue-fields milestone-title cell" id="milestone-title">Title</th>
+                                <th class="issue-fields milestone-due-date cell" id="milestone-due-date">Due Date</th>
+                                <th class="issue-fields milestone-state cell" id="milestone-state">State</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="issue-fields cell">{{issueData.milestone.title}}</td>
+                                <td class="issue-fields cell">{{issueData.milestone.due_date}}</td>
+                                <td class="issue-fields cell">{{issueData.milestone.state}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </aside>
+            <div class="main">
+                <div class="main-top">
+                    <div class="description-container"> 
+                        <label for="issue-description">Description:</label>
+                        <textarea class="issue-description" id="issue-description" rows="5" cols="20" readonly >{{issueData.description}}</textarea>
+                    </div>
+                </div>
+                <div class="main-bottom">
+                    <label>Activity:</label>
+                    <div class="comments-container">
+                        
+                        {{#each commentsData}}
+                        <div class="comments">{{this.body}}</div>
+                        {{/each}}
+                    </div>
+                </div>
             </div>
-            
-        </div>   
+        </div>       
     </div> 
 </div>
 
  <template id="issue-box-template">
         <div class="issue-box" id="issue-box" >
-                        <div class="header-container">
-                            <h4 class="issue-title" id="issue-title"></h4>
+            <div class="header-container">
+                <h4 class="issue-title" id="issue-title"></h4>
+            </div>
+            <div class="content-container">
+                <aside class="left-aside">
+                    <div class="author-container">
+                        <label for="issue-author" class="">Author:&nbsp </label>
+                        <div class="issue-fields" id="issue-author">
+                            <p></p>
                         </div>
-                        
-                        <div class="author-container">
-                            <label for="issue-author" class="">Author:&nbsp </label>
-                            <div class="issue-fields" id="issue-author">
+                    </div>
+                    <div class="labels-container"  id="labels-container">
+                        <label for="issue-labels" > Labels: </label>
+                        <div class="issue-fields" id="issue-labels">
+                            <p></p>
+                        </div>
+                    </div>
+                    <div class="assignees-container">
+                        <label class="label" for="issue-assignees">Assignees:&nbsp </label>
+                            <div class="issue-fields" id="issue-assignees">
                                 <p></p>
                             </div>
+                    </div>
+                    <div class="created-at-container">
+                        <label for="issue-created-at">Created at: &nbsp</label>
+                        <div class="issue-fields" id="issue-created-at">
+                            <p></p>
                         </div>
-                        <div class="labels-container"  id="labels-container">
-                            <label for="issue-labels" > Labels: </label>
-                            <div class="issue-fields" id="issue-labels">
-                                <p></p> 
-                            </div>
-                        </div>
-                        <div class="vote-container" id="vote-container">
-                            <div class="upvote-container">
-                                <i class="fa-solid fa-thumbs-up"></i>
-                                <div class="issue-fields" id="issue-upvote">
-                                    <p ></p>
-                                </div>
-                               
-                            </div>
-                            <div class="downvote-container">
-                                <i class="fa-solid fa-thumbs-down"></i>
-                                <div class="issue-fields" id="issue-downvote">
-                                    <p></p>
-                                </div>
+                        
+                    </div>
+                    <div class="closed-at-container">
+                        <label for="issue-closed-at">Closed at: &nbsp</label>
+                        <div class="issue-fields" id="issue-closed-at">
+                            <p></p>
+                        </div>  
+                    </div> 
+                    <div class="state-container">
+                        <label for="issue-state">State: </label>
+                        <div class="issue-fields" id="issue-state">
+                            <p></p>
+                        </div>  
+                    </div>  
+                    <div class="due-date-container">
+                        <label for="issue-due-date">Due Date: &nbsp</label>
+                        <div class="issue-fields" id="issue-due-date">
+                            <p></p>
+                        </div> 
+                    </div>
+                    <div class="vote-container" id="vote-container">
+                        <div class="upvote-container">
+                            <i class="fa-solid fa-thumbs-up"></i>
+                            <div class="issue-fields" id="issue-upvote">
+                                <p ></p>
                             </div>
                             
                         </div>
-                        <div class="assignees-container">
-                            <label class="label" for="issue-assignees">Assignees:&nbsp </label>
-                                <div class="issue-fields" id="issue-assignees">
-                                    
-                                </div>
-                        </div>
-                        <div class="date-container">
-                            <div class="created-at-container">
-                                <label for="issue-created-at">Created at: &nbsp</label>
-                                <div class="issue-fields" id="issue-created-at">
-                                    <p></p>
-                                </div>
-                                
+                        <div class="downvote-container">
+                            <i class="fa-solid fa-thumbs-down"></i>
+                            <div class="issue-fields" id="issue-downvote">
+                                <p></p>
                             </div>
-                            <div class="closed-at-container">
-                                <label for="issue-closed-at">Closed at: &nbsp</label>
-                                <div class="issue-fields" id="issue-closed-at">
-                                    <p></p>
-                                </div>  
-                            </div> 
-                        </div>
-                        <div class="description-container"> 
-                            <label for="issue-description">Description:</label>
-                            <textarea class="issue-description" id="issue-description" rows="5" cols="30" readonly ></textarea>
-                        </div>
-                        <div class="state-container">
-                            <label for="issue-state">State: </label>
-                            <div class="issue-fields" id="issue-state">
-                                <p></p>
-                            </div>  
-                        </div>  
-                        <div class="due-date-container">
-                            <label for="issue-due-date">Due Date: &nbsp</label>
-                            <div class="issue-fields" id="issue-due-date">
-                                <p></p>
-                            </div> 
                         </div> 
                     </div>
+                    <div class="milestone-container">
+                        <label for="milestone-table">Milestone</label>
+                        <div class="milestone-table-container">
+                            <table class="milestone-table" id="milestone-table">
+                            <thead>
+                                <tr>
+                                    <th class="issue-fields milestone-title cell" id="milestone-title">Title</th>
+                                    <th class="issue-fields milestone-due-date cell" id="milestone-due-date">Due Date</th>
+                                    <th class="issue-fields milestone-state cell" id="milestone-state">State</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="issue-fields cell">{{issueData.milestone.title}}</td>
+                                    <td class="issue-fields cell">{{issueData.milestone.due_date}}</td>
+                                    <td class="issue-fields cell">{{issueData.milestone.state}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </aside>
+                <div class="main">
+                <div class="main-top">
+                    <div class="description-container"> 
+                        <label for="issue-description">Description:</label>
+                        <textarea class="issue-description" id="issue-description" rows="5" cols="20" readonly >{{issueData.description}}</textarea>
+                    </div>
+                </div>
+                <div class="main-bottom">
+                    
+                    <div class="comments-container">
+                        <label>Activity:</label>
+                        
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
     </template>
-        
-    </div>

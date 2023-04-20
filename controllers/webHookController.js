@@ -1,6 +1,7 @@
 const dayjs = require('dayjs')
 const relativeTime = require('dayjs/plugin/relativeTime')
 dayjs.extend(relativeTime)
+const marked = require('marked')
 
 const postFromGitlab = (io,app) => {
 
@@ -24,7 +25,8 @@ const postFromGitlab = (io,app) => {
             state: body.object_attributes.state,
             assignees: body.assignees ? body.assignees.map(assignee => ({username: assignee.username})): null,
             labels: body.labels ? body.labels.map(label => ({name: label.title})): null,
-            updated_from_now: dayjs(body.object_attributes.updated_at).fromNow()
+            updated_from_now: dayjs(body.object_attributes.updated_at).fromNow(),
+            added_comment: body.event_type==='note' ? body.object_attributes.note : null
         }
         io.emit('issueUpdated', issue)
         res.status(201)

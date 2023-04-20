@@ -7,7 +7,11 @@ const notificationBtn = document.querySelector('#notification-btn')
 const notificaionBody = document.querySelector('#notification-body')
 const homeButton = document.querySelector('#home-button')
 const issuesBtn = document.querySelector('#issues-btn')
-
+const commentsContainer = document.querySelector('.comments-container')
+console.log(commentsContainer)
+if(commentsContainer){
+    const comment = commentsContainer.firstElementChild.cloneNode(true)
+}
 const issueDataTemplate = document.querySelector('#issue-box-template')
 const notificationTemplate = document.querySelector('#notification-template')
 
@@ -36,10 +40,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const comments = Array.from(document.querySelectorAll('.comments'))
     comments.forEach(comment => {
        //convert string containing html elements to html elements
-       const commentConvertedToHtml = new DOMParser().parseFromString(comment.textContent,'text/html').documentElement
-       console.log(commentConvertedToHtml)
+       const p = document.createElement('p')
+      // console.log(comment.innerHTML)
+       p.innerHTML = comment.textContent
+      // const commentConvertedToHtml = new DOMParser().parseFromString(comment.textContent,'text/html').documentElement
+       //console.log(p.firstElementChild)
        comment.replaceChildren()
-       comment.appendChild(commentConvertedToHtml)
+       comment.appendChild(p.firstElementChild)
     })
 
 })
@@ -186,6 +193,8 @@ const enablebutton = (button) => {
 }
 
 const prepareIssueBox = (issue) => {
+    const prvUpvote = document.querySelector('#issue-upvote')
+    const prvDownvote = document.querySelector('#issue-downvote')
     console.log(issue.iid)
     const issueBody = issueDataTemplate.content.cloneNode(true)
     const issueBox = issueBody.querySelector('.issue-box')
@@ -207,7 +216,18 @@ const prepareIssueBox = (issue) => {
         issueBox.classList.remove('issue-box')
         issueBox.classList.add('single-issue-box')
     }
-    
+    if(commentsContainer) {
+        console.log('commmentssss')
+        const commentsContainerToBeReplaced = issueBody.querySelector('.comments-container')
+        console.log(commentsContainerToBeReplaced)
+        console.log( comment)
+        comment.innerHTML = `<p>${issue.added_comment}</p>`
+        console.log(comment)
+        commentsContainer.prepend(comment)
+        console.log(commentsContainer)
+        commentsContainerToBeReplaced.innerHTML = commentsContainer.innerHTML
+        //commentsContainerToBeReplaced.appendChild(commentsContainer)
+    }
     
     issueBox.id = `issue-box-${issue.iid}`
     header.textContent = issue.title
@@ -237,7 +257,7 @@ const prepareIssueBox = (issue) => {
     issue.state === 'opened' ? state.classList.add('opened') : state.classList.remove('opened')
     issue.due_date ? (dueDate.textContent=issue.due_date) : ''
     issue.closed_by ? (closedBy.textContent=issue.closed_by) : ''
-    upvotes.textContent = issue.upvotes
-    downvotes.textContent = issue.downvotes
+    upvotes.textContent = prvUpvote.textContent
+    downvotes.textContent = prvDownvote.textContent
     issuesContainer.replaceChild(issueBox, issueToBeUpdated)
 }

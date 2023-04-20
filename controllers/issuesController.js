@@ -39,8 +39,7 @@ const getIssueById = async (req, res, next) => {
         created_at : comment.created_at,
         updated_at : comment.updated_at
     }))
-    console.log(issueData.title)
-    commentsData.forEach(comment =>console.log(comment.body))
+    //commentsData.forEach(comment =>console.log(comment.body))
     res.render('issues/issue', { 
         issueData, 
         title: 'Issue',
