@@ -36,7 +36,7 @@
                                     </div>
                                 </div>
                                 <div class="issue-link-container">
-                                    <a href="/issues/issue/{{this.iid}}" class="issue-link">
+                                    <a href="/issues/issue/{{this.iid}}" class="issue-link" id="issue-link">
                                         To issue page
                                         <i class="fa-solid fa-arrow-right"></i>
                                     </a>
@@ -87,15 +87,16 @@
                                 </div>  
                                 <div class="state-container">
                                     <label for="issue-state">State: </label>
-                                    <div class="issue-fields" id="issue-state">
+                                    {{#stateHandler this.state}}
+                                    <div class="issue-fields {{currentState}}" id="issue-state">
+                                    {{/stateHandler}} 
                                         <p>{{this.state}}</p>
-                                    </div>  
-                                </div> 
+                                    </div>
+                                     
+                                </div>
                             </div>
                         </div>  
                     </div>
-                
-                
         {{/each}}
         {{else}}
         <p>No data to show yet</p>
@@ -135,6 +136,12 @@
                                 
                             </div>
                     </div>
+                    <div class="issue-link-container">
+                                    <a href="" class="issue-link" id="issue-link">
+                                        To issue page
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
+                                </div>
                 </div>
 
                 <div class="middle-column">

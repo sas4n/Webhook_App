@@ -27,6 +27,16 @@ app.engine('.hbs', engine({
         pages += options.fn({ index: i })
       }
       return pages
+    },
+    /**
+     * A helper method to add the required value to the classlist.
+     *
+     * @param {string} value current state of the issue.
+     * @param {object} options with help of fn method all value provided as an object inside it could be accessible inside helper method.
+     * @returns {string} The current state string or an empty string.
+     */
+    stateHandler: (value, options) => {
+      return value === 'opened' ? options.fn({ currentState: value }) : options.fn({ currentState: '' })
     }
   }
 }))

@@ -185,6 +185,7 @@ const updateIssueBox = (issue) => {
   const upvotes = issueBody.querySelector('#issue-upvote')
   const downvotes = issueBody.querySelector('#issue-downvote')
   const issueToBeUpdated = document.querySelector(`#issue-box-${issue.iid}`)
+  const issueLink = issueBody.querySelector('#issue-link')
   if (issueBox.hasAttribute('id')) {
     issueBox.classList.remove('issue-box')
     issueBox.classList.add('single-issue-box')
@@ -223,6 +224,7 @@ const updateIssueBox = (issue) => {
   issue.due_date ? (dueDate.textContent = issue.due_date) : ''
   // eslint-disable-next-line no-unused-expressions
   issue.closed_by ? (closedBy.textContent = issue.closed_by) : ''
+  issueLink.href = `/issues/issue/${issue.iid}`
   upvotes.textContent = prvUpvote.textContent
   downvotes.textContent = prvDownvote.textContent
   issuesContainer.replaceChild(issueBox, issueToBeUpdated)

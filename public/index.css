@@ -368,17 +368,16 @@ textarea {
     overflow: auto;
 }
 
-#issue-state {
+.state-container .issue-fields {
     height: 80%;
-    color: red;
-    
+    background-color: rgb(209, 42, 42);
+    color: white;
     border-radius: 4px;
-    background-color:#fff685;
 }
 
-.opened {
-    
-    color: #00c07f;
+.issue-fields.opened {
+    background-color: #00c07f;
+    color: white;
 }
 
 .vote-container {
