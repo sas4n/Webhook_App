@@ -43,6 +43,7 @@ app.use('/issues', require('./routes/issuesRouter'))
 io.on('connection', async (socket) => {
   console.log('user connected')
   postFromGitlab(io, app)
+  socket.on('disconnect', () => console.log('user disconnected'))
 })
 
 server.listen(port, () => {
