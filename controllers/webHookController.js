@@ -1,19 +1,17 @@
 const dayjs = require('dayjs')
 const relativeTime = require('dayjs/plugin/relativeTime')
 dayjs.extend(relativeTime)
-const marked = require('marked')
 
 /**
+ * Extract the required data received from Gitlab Webhook and send them to the client through a websocket.
  *
- * @param io
- * @param app
+ * @param {object} io Server object.
+ * @param {object} app Application object.
  */
 const postFromGitlab = (io, app) => {
-  console.log('ok')
   app.post('/gitlab', (req, res) => {
     if (req.headers['x-gitlab-token'] === process.env.GITLAB_SECRET_KEY) {
       const { body } = req
-      console.log(body)
       const issue = {
         event_type: body.event_type,
         owner_name: body.user.name,
@@ -36,7 +34,6 @@ const postFromGitlab = (io, app) => {
       res.status(201)
       res.send()
     } else {
-      console.log('not from gitlab')
       res.status(403).json({ error: new Error('You are not Authorized') })
     }
   })
