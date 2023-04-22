@@ -12,10 +12,8 @@ if (commentsContainer) {
   comment = commentsContainer.firstElementChild.cloneNode(true)
 }
 const issueDataTemplate = document.querySelector('#issue-box-template')
-const notificationTemplate = document.querySelector('#notification-template')
 
 const pageLimit = 4
-let totalPages
 let currentPageNumber = 1
 
 // eslint-disable-next-line no-undef
@@ -25,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (document.title === 'All Issues') {
     setCurrentPage(1)
     previousButton.addEventListener('click', () => {
-      console.log('previous btn')
       currentPageNumber--
       setCurrentPage(currentPageNumber)
     })
@@ -105,41 +102,6 @@ const setCurrentPage = (num) => {
 }
 
 /**
- *
- * @param issues
- */
-const notificationUpdateHandler = (issues) => {
-  // first sort the array based on the date, so we have the newest notification on top
-  issues.sort((a, b) => {
-    return a.updated_at < b.updated_at ? 1 : a.updated_at > b.updated_at ? -1 : 0
-  })
-  issues.forEach((issue) => {
-    const notification = createNewNotification(issue)
-    notificaionBody.appendChild(notification)
-  })
-}
-
-/**
- *
- * @param issue
- */
-const createNewNotification = (issue) => {
-  const notificationBox = notificationTemplate.content.cloneNode(true)
-  const notification = notificationBox.querySelector('#notification')
-  notification.addEventListener('click', () => fetchIssueDetails(issue))
-  notification.textContent = ''
-  return notification
-}
-
-/**
- *
- * @param issue
- */
-const fetchIssueDetails = (issue) => {
-  socket.emit('fetchIssueById', issue.iid)
-}
-
-/**
  * It deceides if a next button should be disabled or not.
  */
 const nextButtonStatus = () => {
@@ -215,7 +177,6 @@ const updateIssueBox = (issue) => {
   const dueDate = issueBody.querySelector('#issue-due-date')
   const upvotes = issueBody.querySelector('#issue-upvote')
   const downvotes = issueBody.querySelector('#issue-downvote')
-  console.log(issue.iid)
   const issueToBeUpdated = document.querySelector(`#issue-box-${issue.iid}`)
   if (issueBox.hasAttribute('id')) {
     issueBox.classList.remove('issue-box')
@@ -259,3 +220,25 @@ const updateIssueBox = (issue) => {
   downvotes.textContent = prvDownvote.textContent
   issuesContainer.replaceChild(issueBox, issueToBeUpdated)
 }
+
+/* const notificationUpdateHandler = (issues) => {
+  // first sort the array based on the date, so we have the newest notification on top
+  issues.sort((a, b) => {
+    return a.updated_at < b.updated_at ? 1 : a.updated_at > b.updated_at ? -1 : 0
+  })
+  issues.forEach((issue) => {
+    const notification = createNewNotification(issue)
+    notificaionBody.appendChild(notification)
+  })
+}
+
+const createNewNotification = (issue) => {
+  const notificationBox = notificationTemplate.content.cloneNode(true)
+  const notification = notificationBox.querySelector('#notification')
+  notification.addEventListener('click', () => fetchIssueDetails(issue))
+  notification.textContent = ''
+  return notification
+}
+const fetchIssueDetails = (issue) => {
+  socket.emit('fetchIssueById', issue.iid)
+} */
