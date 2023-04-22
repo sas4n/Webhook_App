@@ -3,7 +3,6 @@
     <div class="issues-data-container" id="issues-data-container">
         {{#if allIssuesData.length}}
             {{#each allIssuesData}}
-                <a class="issue-link" href="/issues/issue/{{this.iid}}">
                     <div class="issue-box" id="issue-box-{{this.iid}}">
                         <div class="header-container">
                             <h4 class="issue-title" id="issue-title">{{this.title}}</h4>
@@ -36,6 +35,12 @@
                                         {{/if}}
                                     </div>
                                 </div>
+                                <div class="issue-link-container">
+                                    <a href="/issues/issue/{{this.iid}}" class="issue-link">
+                                        To issue page
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
+                                </div>
                             </div>
 
                             <div class="middle-column">
@@ -58,6 +63,7 @@
                                         </div>
                                     </div>   
                                 </div>
+                                
                             </div>
                         
                             <div class="right-column">
@@ -88,7 +94,7 @@
                             </div>
                         </div>  
                     </div>
-                </a>
+                
                 
         {{/each}}
         {{else}}

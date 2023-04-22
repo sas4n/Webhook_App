@@ -140,10 +140,19 @@
     justify-content: center;
 }
 
+.issue-link-container{
+    background-color: #ffb285;
+    width: 80%;
+    font-size: 12px;
+    border-radius: 5px;
+    margin-left: 10px;
+    padding: 3px;
+}
+
 .issue-link {
     text-decoration: inherit;
     color: inherit;
-    cursor: auto;
+    cursor: pointer;
 }
 
 .issue-box {
@@ -387,6 +396,7 @@ textarea {
 .downvote-container {
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
     font-size: 12px;
 }
 
