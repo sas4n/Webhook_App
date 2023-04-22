@@ -12,7 +12,6 @@ if (commentsContainer) {
   comment = commentsContainer.firstElementChild.cloneNode(true)
 }
 const issueDataTemplate = document.querySelector('#issue-box-template')
-
 const pageLimit = 4
 let currentPageNumber = 1
 
@@ -26,13 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
       currentPageNumber--
       setCurrentPage(currentPageNumber)
     })
-
     nextButton.addEventListener('click', () => {
       currentPageNumber++
       setCurrentPage(currentPageNumber)
     })
   }
-  //
+  notificationButtonVissiblityHandler(document.title)
   const comments = Array.from(document.querySelectorAll('.comments'))
   comments.forEach(comment => {
     // convert string containing html elements to html elements
@@ -80,6 +78,15 @@ notificationBtn.addEventListener('click', () => {
 
 const allPageNumbers = Array.from(document.querySelectorAll('.page-number'))
 allPageNumbers.forEach((pageNumber, index) => pageNumber.addEventListener('click', () => setCurrentPage(index + 1)))
+
+/**
+ * Change the visibility of the notification btn relevantly.
+ *
+ * @param {string} documentTitle Title the current page.
+ */
+const notificationButtonVissiblityHandler = (documentTitle) => {
+  documentTitle !== 'All Issues' ? notificationBtn.classList.add('hidden') : notificationBtn.classList.remove('hidden')
+}
 
 /**
  * Set the current page and based on that show the current page.

@@ -1,10 +1,10 @@
 /**
- *
- * @param req
- * @param res
+ *Render the home page.
+
+ * @param {object} req request from client.
+ * @param {object} res respond to the client.
  */
 const homeHandler = (req, res) => {
-  console.log('Home Handler')
   res.render('home')
 }
 

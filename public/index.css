@@ -221,7 +221,7 @@
 .single-issue-box {
     width:70%;
     min-width: 500px;
-    height: 400px;
+    height: 410px;
     display: flex;
     flex-flow: row wrap;
     border-radius: 4px;
