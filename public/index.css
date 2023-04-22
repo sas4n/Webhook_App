@@ -140,6 +140,12 @@
     justify-content: center;
 }
 
+.issue-link {
+    text-decoration: inherit;
+    color: inherit;
+    cursor: auto;
+}
+
 .issue-box {
     width: 38vw;
     min-width: 350px;

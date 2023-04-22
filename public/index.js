@@ -1,16 +1,15 @@
+// eslint-disable-next-line no-undef
 dayjs.extend(window.dayjs_plugin_relativeTime)
 const issuesContainer = document.querySelector('#issues-data-container')
-const pageNumberContainer = document.querySelector('#pagination-number-container')
 const nextButton = document.querySelector('#next-page')
 const previousButton = document.querySelector('#previous-page')
 const notificationBtn = document.querySelector('#notification-btn')
 const notificaionBody = document.querySelector('#notification-body')
 const homeButton = document.querySelector('#home-button')
-const issuesBtn = document.querySelector('#issues-btn')
 const commentsContainer = document.querySelector('.comments-container')
-console.log(commentsContainer)
+let comment
 if (commentsContainer) {
-  const comment = commentsContainer.firstElementChild.cloneNode(true)
+  comment = commentsContainer.firstElementChild.cloneNode(true)
 }
 const issueDataTemplate = document.querySelector('#issue-box-template')
 const notificationTemplate = document.querySelector('#notification-template')
@@ -19,6 +18,7 @@ const pageLimit = 4
 let totalPages
 let currentPageNumber = 1
 
+// eslint-disable-next-line no-undef
 const socket = io()
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -40,50 +40,29 @@ document.addEventListener('DOMContentLoaded', () => {
   comments.forEach(comment => {
     // convert string containing html elements to html elements
     const p = document.createElement('p')
-    // console.log(comment.innerHTML)
     p.innerHTML = comment.textContent
     // const commentConvertedToHtml = new DOMParser().parseFromString(comment.textContent,'text/html').documentElement
-    // console.log(p.firstElementChild)
     comment.replaceChildren()
     comment.appendChild(p.firstElementChild)
   })
 })
-/* socket.on('allIssuesDataFromServer', (data) => {
-    //First we remove everything from before to prevent adding all issue boxes again to current boxes
-    issuesContainer.replaceChildren()
-    pageNumberContainer.replaceChildren()
-    totalPages = Math.ceil(data.length / pageLimit)
-    data.forEach(issue => prepareIssueBox(issue))
-    notificationUpdateHandler(data)
-    handlePageNumber(totalPages)
-    setCurrentPage(1)
-}) */
 
 socket.on('issueUpdated', (issue) => {
   const notification = document.createElement('div')
   notification.classList.add('notification')
-
   const anchor = document.createElement('a')
   anchor.classList.add('notification-link')
-  console.log(`/issues/issue/${issue.iid}`)
   anchor.href = `/issues/issue/${issue.iid}`
   anchor.textContent = `Issue ${issue.title} was updated ${issue.updated_from_now}`
   notification.appendChild(anchor)
   notificaionBody.prepend(notification)
-  console.log('this' + notificationBtn)
   notificationBtn.classList.add('new-notification')
-  console.log('here')
-  prepareIssueBox(issue)
+  updateIssueBox(issue)
   // socket.emit('fetchAllIssuesData')
-})
-
-socket.on('issueDataFromServer', (data) => {
-  console.log(data)
 })
 
 homeButton.addEventListener('click', () => {
   window.location.href = 'http://localhost:3000/issues/all-issues'
-  // socket.emit('fetchAllIssuesData')
 })
 
 notificationBtn.addEventListener('click', () => {
@@ -106,13 +85,15 @@ const allPageNumbers = Array.from(document.querySelectorAll('.page-number'))
 allPageNumbers.forEach((pageNumber, index) => pageNumber.addEventListener('click', () => setCurrentPage(index + 1)))
 
 /**
+ * Set the current page and based on that show the current page.
  *
- * @param num
+ * @param {number} num number of the page.
  */
 const setCurrentPage = (num) => {
   currentPageNumber = num
   allPageNumbers.forEach(pageNumber => {
-    if (pageNumber.textContent == num) {
+    // eslint-disable-next-line eqeqeq
+    if (pageNumber.textContent == num) { // I used == instead of ===, as pagenumber.textContent is a string.
       pageNumber.classList.add('active')
     } else {
       pageNumber.classList.remove('active')
@@ -138,17 +119,12 @@ const notificationUpdateHandler = (issues) => {
   })
 }
 
-const allNotifications = Array.from(document.querySelectorAll('.notification'))
-allNotifications.forEach((notification) => notification.addEventListener('click', (e) => console.log(e.target.id)))
-
 /**
  *
  * @param issue
  */
 const createNewNotification = (issue) => {
-  console.log('line 130')
   const notificationBox = notificationTemplate.content.cloneNode(true)
-  console.log('line 131')
   const notification = notificationBox.querySelector('#notification')
   notification.addEventListener('click', () => fetchIssueDetails(issue))
   notification.textContent = ''
@@ -164,7 +140,7 @@ const fetchIssueDetails = (issue) => {
 }
 
 /**
- *
+ * It deceides if a next button should be disabled or not.
  */
 const nextButtonStatus = () => {
   const lastPageIndex = document.querySelectorAll('.page-number').length - 1
@@ -175,7 +151,7 @@ const nextButtonStatus = () => {
 }
 
 /**
- *
+ * It decides if the previous button shold be disbled or not.
  */
 const previousButtonStatus = () => {
   if (document.querySelectorAll('.page-number')[0].classList.contains('active')) {
@@ -184,7 +160,7 @@ const previousButtonStatus = () => {
 }
 
 /**
- *
+ * Make the selected page visible.
  */
 const showCurrentPage = () => {
   const visiblePageStartIndex = (currentPageNumber - 1) * pageLimit
@@ -198,8 +174,9 @@ const showCurrentPage = () => {
 }
 
 /**
+ * Disable a button.
  *
- * @param button
+ * @param {HTMLElement} button The button to disable.
  */
 const disableButton = (button) => {
   button.classList.add('disabled')
@@ -207,8 +184,9 @@ const disableButton = (button) => {
 }
 
 /**
+ * Enable a button.
  *
- * @param button
+ * @param {HTMLElement} button The button to enable.
  */
 const enablebutton = (button) => {
   button.classList.remove('disabled')
@@ -216,13 +194,13 @@ const enablebutton = (button) => {
 }
 
 /**
+ * Update the relevant issue box after an issue updated.
  *
- * @param issue
+ * @param {object} issue The information of updated issue.
  */
-const prepareIssueBox = (issue) => {
+const updateIssueBox = (issue) => {
   const prvUpvote = document.querySelector('#issue-upvote')
   const prvDownvote = document.querySelector('#issue-downvote')
-  console.log(issue.iid)
   const issueBody = issueDataTemplate.content.cloneNode(true)
   const issueBox = issueBody.querySelector('.issue-box')
   const header = issueBody.querySelector('#issue-title')
@@ -244,14 +222,9 @@ const prepareIssueBox = (issue) => {
     issueBox.classList.add('single-issue-box')
   }
   if (commentsContainer) {
-    console.log('commmentssss')
     const commentsContainerToBeReplaced = issueBody.querySelector('.comments-container')
-    console.log(commentsContainerToBeReplaced)
-    console.log(comment)
     comment.innerHTML = `<p>${issue.added_comment}</p>`
-    console.log(comment)
     commentsContainer.prepend(comment)
-    console.log(commentsContainer)
     commentsContainerToBeReplaced.innerHTML = commentsContainer.innerHTML
     // commentsContainerToBeReplaced.appendChild(commentsContainer)
   }
@@ -260,15 +233,12 @@ const prepareIssueBox = (issue) => {
   header.textContent = issue.title
   description.value = issue.issue_description
   dueDate.textContent = issue.due_date
-  console.log(author)
   author.innerText = issue.owner_name
   issue.labels.forEach(label => {
     const paragraph = document.createElement('p')
     paragraph.textContent = label.name
     labels.appendChild(paragraph)
   })
-  console.log(issue.labels)
-  console.log(issue.assignees)
   if (issue.assignees) {
     issue.assignees.forEach(assignee => {
       const paragraph = document.createElement('p')
@@ -278,10 +248,12 @@ const prepareIssueBox = (issue) => {
   }
   createdAt.textContent = new Date(issue.created_at).toLocaleString()
   closedAt.textContent = new Date(issue.closed_at).toLocaleString()
-  issue.state === 'closed' ? closedAt.textContent = new Date(issue.closed_at).toLocaleString() : closedAt.textContent = '_',
+  issue.state === 'closed' ? closedAt.textContent = new Date(issue.closed_at).toLocaleString() : closedAt.textContent = '_'
   state.textContent = issue.state
   issue.state === 'opened' ? state.classList.add('opened') : state.classList.remove('opened')
+  // eslint-disable-next-line no-unused-expressions
   issue.due_date ? (dueDate.textContent = issue.due_date) : ''
+  // eslint-disable-next-line no-unused-expressions
   issue.closed_by ? (closedBy.textContent = issue.closed_by) : ''
   upvotes.textContent = prvUpvote.textContent
   downvotes.textContent = prvDownvote.textContent
