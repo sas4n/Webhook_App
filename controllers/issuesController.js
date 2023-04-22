@@ -6,14 +6,14 @@ const axios = require('axios')
 const marked = require('marked')
 
 /**
+ * Get data of all issues from Gitlab and render the relevant page.
  *
- * @param req
- * @param res
- * @param next
+ * @param {object} req request object.
+ * @param {object} res Response object.
+ * @param {Function} next A callback function required by middleware to call the next function.
  */
 const gettAllIssues = async (req, res, next) => {
   const allIssuesData = await fethAllDataFromGitlab()
-  // we do this, since we need to sort it based on updated-date, but we dont want to sort all data, otherwise, they will be shown based on their update date.
   const notificationData = allIssuesData.map(issue => ({
     title: issue.title,
     updated_at: issue.updated_at,
@@ -21,10 +21,10 @@ const gettAllIssues = async (req, res, next) => {
     id: issue.id,
     iid: issue.iid
   }))
+  // we do this, since we need to sort it based on updated-date, but we dont want to sort all data, otherwise, they will be shown based on their update date.
   notificationData.sort((a, b) => {
     return a.updated_at < b.updated_at ? 1 : a.updated_at > b.updated_at ? -1 : 0
   })
-  // allIssuesData.forEach(issue => console.log(issue.assignees))
   res.render('issues/allIssues', {
     allIssuesData,
     totalPages: Math.ceil(allIssuesData.length / 4),
@@ -34,10 +34,11 @@ const gettAllIssues = async (req, res, next) => {
 }
 
 /**
+ * Get the the selected issue and render the relevant page.
  *
- * @param req
- * @param res
- * @param next
+ * @param {object} req request object.
+ * @param {object} res response object.
+ * @param {Function} next A callback function required by middleware to call the next function.
  */
 const getIssueById = async (req, res, next) => {
   const { iid } = req.params
@@ -49,7 +50,6 @@ const getIssueById = async (req, res, next) => {
     created_at: comment.created_at,
     updated_at: comment.updated_at
   }))
-  // commentsData.forEach(comment =>console.log(comment.body))
   res.render('issues/issue', {
     issueData,
     title: 'Issue',
@@ -57,47 +57,37 @@ const getIssueById = async (req, res, next) => {
   })
 }
 
-/* const getAllCommentsOfAnIssue = async (req, res) => {
-    const{iid} = req.params
-    const allComments = await fetchAllCommentsOfAnIssue(iid)
-    const commentsData = allComments.map(comment => ({
-        id : comment.id,
-        body : marked.parse(comment.body),
-        created_at : comment.created_at,
-        updated_at : comment.updated_at
-    }))
-    res.render('issues/issue', {commentsData})
-} */
-
 /**
- *
+ * Get all issues data from Fitlab.
  */
 const fethAllDataFromGitlab = async () => {
   const config = {
     headers: { Authorization: ` Bearer ${process.env.GITLAB_ACCESS_TOKEN}` }
   }
-  const { data, headers } = await axios.get(process.env.GITLAB_URL_FETCH_ALL_ISSUES, config)
-  // data.forEach(issue => console.log(issue))
+  const { data } = await axios.get(process.env.GITLAB_URL_FETCH_ALL_ISSUES, config)
   const allIssuesData = data.map(issue => extractRequiredData(issue))
   return allIssuesData
 }
 
 /**
+ * Get data of the selected issue from Gitlab and extract the required data.
  *
- * @param issue_iid
+ * @param {string} issueIid Iid of the issue.
  */
-const fetchIssueByIdFromGitlab = async (issue_iid) => {
+const fetchIssueByIdFromGitlab = async (issueIid) => {
   const config = {
     headers: { Authorization: ` Bearer ${process.env.GITLAB_ACCESS_TOKEN}` }
   }
-  const { data, headers } = await axios.get(process.env.GITLAB_URL_FETCH_ISSUE_BY_ID + issue_iid, config)
+  const { data } = await axios.get(process.env.GITLAB_URL_FETCH_ISSUE_BY_ID + issueIid, config)
   const issueData = extractRequiredData(data)
   return issueData
 }
 
 /**
+ * Extract the required data from an issue's data.
  *
- * @param issue
+ * @param {object} issue Issue object.
+ * @returns {object} Required issue data.
  */
 const extractRequiredData = (issue) => ({
   id: issue.id,
@@ -110,7 +100,6 @@ const extractRequiredData = (issue) => ({
   closed_at: new Date(issue.closed_at).toLocaleString(),
   labels: issue.labels,
   closed_by: issue.closed_By ? issue.closed_By.name : null, // it s a bug, closed_by is undefined somehow
-  labels: issue.labels,
   assignees: issue.assignees.map((assignee) => ({ assignee_userName: assignee.username })),
   author_name: issue.author.name,
   type: issue.type,
@@ -131,17 +120,16 @@ const extractRequiredData = (issue) => ({
 })
 
 /**
+ * Fetch all comments and other activities of an issue.
  *
- * @param issue_iid
+ * @param {string} issueIid Iid of an issue.
  */
-const fetchAllCommentsOfAnIssue = async (issue_iid) => {
+const fetchAllCommentsOfAnIssue = async (issueIid) => {
   const config = {
     headers: { Authorization: ` Bearer ${process.env.GITLAB_ACCESS_TOKEN}` }
   }
-  const GITLAB_URL_FETCH_ALL_COMMENTS_OF_AN_ISSUE = process.env.GITLAB_URL_FETCH_ISSUE_BY_ID + issue_iid + '/notes'
-
+  const GITLAB_URL_FETCH_ALL_COMMENTS_OF_AN_ISSUE = process.env.GITLAB_URL_FETCH_ISSUE_BY_ID + issueIid + '/notes'
   const { data } = await axios.get(GITLAB_URL_FETCH_ALL_COMMENTS_OF_AN_ISSUE, config)
-  // data.forEach(comment => console.log(marked.parse(comment.body)))
   return data
 }
 
