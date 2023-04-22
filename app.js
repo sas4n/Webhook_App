@@ -15,9 +15,11 @@ app.engine('.hbs', engine({
   defaultLayout: join(__dirname, 'views', 'layout', 'default'),
   helpers: {
     /**
+     * A helper method calculating the number of page in the pagination page.
      *
-     * @param times
-     * @param options
+     * @param {number} times Numbers of times that should be looped or the value that should be specifed beside the helper method in handlebars.
+     * @param {object} options with help of fn method all value provided as an object inside it could be accessible inside helper method.
+     * @returns {number} Number of pages.
      */
     forEach: (times, options) => {
       let pages = ''
@@ -31,7 +33,6 @@ app.engine('.hbs', engine({
 
 app.set('view engine', '.hbs')
 app.set('views', join(__dirname, 'views'))
-
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static(join(__dirname, 'public')))
@@ -41,7 +42,6 @@ app.use('/issues', require('./routes/issuesRouter'))
 
 io.on('connection', async (socket) => {
   console.log('user connected')
-  // app.use('/gitlab', require('./routes/webHookRouter'))
   postFromGitlab(io, app)
 })
 
