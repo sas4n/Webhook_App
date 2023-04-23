@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "NODE_ENV=production node app.js",
+    "start:div": "NODE_ENV=development node app.js",
     "devStart": "nodemon --inspect app.js",
     "lint": "npx eslint . || exit 0",
     "lint:fix": "npx eslint . --fix || exit 0",
